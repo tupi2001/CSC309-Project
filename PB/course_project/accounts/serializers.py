@@ -12,7 +12,8 @@ from rest_framework.status import HTTP_200_OK
 class RegisterSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number', 'password', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number',
+                  'password', 'password2']
 
     def validate_username(self, data):
         username = data
@@ -50,7 +51,8 @@ class RegisterSerializer(serializers.ModelSerializer):
         if password != '':
 
             if len(password) < 8:
-                raise serializers.ValidationError('Password too short. Must be at least 8 characters')
+                raise serializers.ValidationError(
+                    'Password too short. Must be at least 8 characters')
 
             if password != password2:
                 raise serializers.ValidationError("Two passwords don't match")
@@ -62,7 +64,7 @@ class RegisterSerializer(serializers.ModelSerializer):
             avatar = data["avatar"]
         else:
             avatar = None
-        
+
         user = CustomUser.objects.create(
             first_name=data['first_name'],
             last_name=data['last_name'],
@@ -77,10 +79,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
 
+
 class LoginSerializer(serializers.Serializer):
     username = serializers.CharField()
     password = serializers.CharField()
-
 
     def validate(self, data):
         username = data.get('username')

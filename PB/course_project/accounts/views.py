@@ -15,6 +15,7 @@ from rest_framework.views import APIView
 from accounts.models import CustomUser
 from accounts.serializers import LoginSerializer, RegisterSerializer
 
+
 # Create your views here.
 
 class RegisterView(generics.CreateAPIView):
@@ -24,7 +25,7 @@ class RegisterView(generics.CreateAPIView):
     def post(self, request, *args, **kwargs):
         serializer = RegisterSerializer(data=request.data, context={'request': request})
 
-        if serializer.is_valid(raise_exception = True):
+        if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             token, created = Token.objects.get_or_create(user=user)
 
@@ -36,7 +37,7 @@ class LoginView(GenericAPIView):
     permission_classes = (AllowAny,)
 
     def post(self, request):
-        serializer = LoginSerializer(data = request.data, context = {'request': request})
+        serializer = LoginSerializer(data=request.data, context={'request': request})
 
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
