@@ -1,6 +1,6 @@
 from django.db import models
 from django.db.models import CASCADE
-# from somewhere, import studio
+from studios.models import Studio
 
 class Class(models.Model):
     studio = models.ForeignKey(to=Studio, on_delete=CASCADE)
@@ -9,7 +9,8 @@ class Class(models.Model):
     coach = models.CharField(max_length=200, null=False)
     keywords = models.CharField(max_length=200, null=False)  # how to create a list
     capacity = models.PositiveIntegerField(null=False)
-    time = models.DateTimeField(null=False)
+    start_time = models.DateTimeField(null=False)
+    end_time = models.DateTimeField(null=False)
     end_date = models.DateField(null=False)
 
     def __str__(self):

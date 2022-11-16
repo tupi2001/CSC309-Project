@@ -6,6 +6,7 @@ from django.views.generic import TemplateView, ListView
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from classes.serializers import ClassSerializer
+from django.utils.timezone import now
 
 
 class CreateClassView(CreateAPIView):
@@ -75,5 +76,8 @@ class ClassesView(ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ClassSerializer
 
-    def get_queryset(self, studio=None):
-        return Class.objects.filter(studio=studio)
+    def get_queryset(self, studio):
+        today = now().time()
+        set = Class.objects.filter(studio=studio)
+        set2 = set.filter(start_time__gte=today).order_by('start_time')
+        return set2

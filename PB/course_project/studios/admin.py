@@ -9,7 +9,7 @@ class AmenitiesInline(admin.TabularInline):
 
 
 class ImagesInline(admin.TabularInline):
-    model = Studios.images.through
+    model = Studio.images.through
 
 
 class StudioAdmin(admin.ModelAdmin):

@@ -17,6 +17,9 @@ class RegisterSerializer(serializers.ModelSerializer):
     def validate_username(self, data):
         username = data
 
+        if not username:
+            raise serializers.ValidationError("This is a required field")
+
         if len(username) < 4:
             raise serializers.ValidationError("Username must contain at least 4 characters")
 
@@ -43,10 +46,12 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return phone_number
 
-    def validate(self, data):
+    def validate_password(self, data):
         password = data['password']
         password2 = data['password2']
 
+        if not password:
+            raise serializers.ValidationError('This is a required field')
         if password != '':
 
             if len(password) < 8:
