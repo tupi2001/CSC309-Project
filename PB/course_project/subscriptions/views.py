@@ -1,29 +1,17 @@
 from django.shortcuts import render
-from django.views.generic import FormView, ListView
+from django.http import JsonResponse
+from rest_framework.decorators import api_view
+from rest_framework.generics import get_object_or_404
+from rest_framework.exceptions import ValidationError
+import json
 
 from .forms import CardInformation
-from .models import Subscriptions, Card, Payments, UserSub
+from .models import Subscriptions, Card, Payment, UserSub
 
 # Create your views here.
 
-class SubscriptionViews(ListView):
-    model = Subscriptions
-    # template = 
+@api_view(['POST'])
 
-    def get_subscription(self):
-        curr_user = self.request.user
-
-        user_member = UserSub.objects.filter(user=curr_user)
-
-        if user_member.exists():
-            return user_member.subscription
-        else:
-            return None
-
-class Payment(FormView):
-    form_class = CardInformation
-
-    def form_valid(self, form):
-        current_user = self.request.user
-
-        
+def AllStudios(request):
+    if request.method == 'POST':
+        payload = json.loads(request.body)
