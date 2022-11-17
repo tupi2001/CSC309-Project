@@ -20,11 +20,11 @@ from classes.views import CreateClassView, UpdateClassView, DeleteClassView, Del
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('login/', LoginView.as_view(), name='login'),
-    path('register/', RegisterView.as_view(), name='register'),
-    path('logout/', LogoutView.as_view(), name='logout'),
-    path('create-class/', CreateClassView.as_view(), name='create-class'),
-    path('update-class/', UpdateClassView.as_view(), name='update-class'),
-    path('delete-class/', DeleteClassView.as_view(), name='delete-class'),
-    path('delete-classes/', DeleteClassesView.as_view(), name='delete-classes')
+    path('accounts/login/', LoginView.as_view(), name='login'),
+    path('accounts/register/', RegisterView.as_view(), name='register'),
+    path('accounts/logout/', LogoutView.as_view(), name='logout'),
+    path('classes/create-class/', CreateClassView.as_view(), name='create-class'),
+    path('classes/update-class/', UpdateClassView.as_view(), name='update-class'),
+    path('classes/delete-class/', DeleteClassView.as_view(), name='delete-class'),
+    path('classes/delete-classes/', DeleteClassesView.as_view(), name='delete-classes')
 ]
