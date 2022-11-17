@@ -1,5 +1,5 @@
 from django.db import models
-from django.core.validators import MinValueValidator, MaxValueValidato
+from django.core.validators import MinValueValidator, MaxValueValidator
 
 # Create your models here.
 
@@ -45,8 +45,8 @@ class AmenitySet(models.Model):
     def __str__(self):
         return str(self.studio) + ': ' + str(self.type) + ' - ' + str(self.quantity)
 
-        class Meta:
-            unique = [['studio', 'type']]
+    class Meta:
+        unique_together = [['studio', 'type']]
 
 
 class ImageSet(models.Model):
@@ -57,4 +57,4 @@ class ImageSet(models.Model):
         return str(self.studio) + ': ' + str(self.image)
 
     class Meta:
-        unique = [['studio', 'image']]
+        unique_together = [['studio', 'image']]
