@@ -10,9 +10,23 @@ from rest_framework.status import HTTP_200_OK
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+
+    password = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+
+    password2 = serializers.CharField(
+        write_only=True,
+        required=True,
+        style={'input_type': 'password'}
+    )
+
     class Meta:
         model = CustomUser
-        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number', 'password', 'password2']
+        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number',
+                  'password', 'password2']
 
     def validate_username(self, data):
         username = data
@@ -43,26 +57,27 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return phone_number
 
-    def validate(self, data):
-        password = data['password']
-        password2 = data['password2']
+    def validate(self, validated_data):
+        password = validated_data['password']
+        password2 = validated_data['password2']
 
         if password != '':
 
             if len(password) < 8:
-                raise serializers.ValidationError('Password too short. Must be at least 8 characters')
+                raise serializers.ValidationError(
+                    'Password too short. Must be at least 8 characters')
 
-            if password != password2:
-                raise serializers.ValidationError("Two passwords don't match")
+        if password != password2:
+            raise serializers.ValidationError("Two passwords don't match")
 
-        return data
+        return validated_data
 
     def create(self, data):
         if 'avatar' in data:
             avatar = data["avatar"]
         else:
             avatar = None
-        
+
         user = CustomUser.objects.create(
             first_name=data['first_name'],
             last_name=data['last_name'],
@@ -77,10 +92,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return user
 
-class LoginSerializer(serializers.Serializer):
+
+class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField()
-
 
     def validate(self, data):
         username = data.get('username')
