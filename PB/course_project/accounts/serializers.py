@@ -4,9 +4,17 @@ from django.db import models
 from django.core.validators import EmailValidator
 from rest_framework import serializers
 from accounts.models import CustomUser
+from django.contrib.auth import get_user_model
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
+
+class UserSerializer(serializers.ModelSerializer):
+    model = CustomUser
+    class Meta:
+        model = CustomUser
+        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number']
+        read_only_field = ['password', 'password2']
 
 
 class RegisterSerializer(serializers.ModelSerializer):
@@ -96,6 +104,10 @@ class RegisterSerializer(serializers.ModelSerializer):
 class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField()
+
+    class Meta:
+        model = CustomUser
+        fields = ['username', 'password']
 
     def validate(self, data):
         username = data.get('username')

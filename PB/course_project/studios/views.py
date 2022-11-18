@@ -7,10 +7,10 @@ from .models import Studio
 import json
 import math
 
+
 # Create your views here.
 
 @api_view(['POST'])
-
 def AllStudios(request):
     if request.method == 'POST':
         payload = json.loads(request.body)
@@ -29,9 +29,11 @@ def AllStudios(request):
             studio = element.__dict__
             studio.pop('_state')
 
-            url_destination = studio['address'].replace(' ', '+') + '+' + studio['postal'].replace('', '+')
+            url_destination = studio['address'].replace(' ', '+') + '+' + studio['postal'].replace(
+                '', '+')
 
-            url = "http://maps.google.com/maps/dir/" + str(user_latitude) + ",+" + str(user_longitude) + "/" + url_destination
+            url = "http://maps.google.com/maps/dir/" + str(user_latitude) + ",+" + str(
+                user_longitude) + "/" + url_destination
 
             latitude_difference = abs(studio['latitude'] - user_latitude) * 111.1
             longitude_difference = abs(studio['longitude'] - user_longitude) * 111.1
@@ -49,11 +51,11 @@ def AllStudios(request):
 
         studios = sorted(studios, key=lambda d: d['distance'])
 
-
         for element in studios:
-            response[element['name']] = s
+            response[element['name']] = studios
 
         return JsonResponse(response)
+
 
 @api_view(['GET'])
 def StudioInformation(request, id):
