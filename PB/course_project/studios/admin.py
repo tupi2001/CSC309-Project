@@ -1,10 +1,6 @@
 from django.contrib import admin
 from .models import Studio, AmenitySet, Amenity, ImageSet, Image
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
 # Register your models here.
 
 
@@ -22,10 +18,6 @@ class StudioAdmin(admin.ModelAdmin):
     class Meta:
         model = Studio
 
-<<<<<<< HEAD
-=======
-
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
 admin.site.register(Studio, StudioAdmin)
 admin.site.register(AmenitySet)
 admin.site.register(Amenity)
