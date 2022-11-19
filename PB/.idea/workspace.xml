@@ -1,26 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="472d727f-b654-4a70-9546-c3588b9f00c6" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/admin.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/apps.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/migrations/0001_initial.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/migrations/__init__.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/models.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/serializers.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/tests.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/urls.py" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/course_project/subscriptions/views.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/accounts/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/course_project/settings.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/course_project/settings.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/course_project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/course_project/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/db.sqlite3" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/studios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/admin.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/studios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/models.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/studios/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/serializers.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/studios/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/views.py" afterDir="false" />
-    </list>
+    <list default="true" id="472d727f-b654-4a70-9546-c3588b9f00c6" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
