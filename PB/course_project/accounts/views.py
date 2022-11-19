@@ -3,10 +3,7 @@ import jwt
 from django.contrib.auth import login, logout
 from django.contrib.auth.models import update_last_login
 from django.shortcuts import get_object_or_404
-<<<<<<< HEAD
-=======
 from django.http import JsonResponse
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
 from rest_framework import generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
@@ -17,12 +14,6 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
-<<<<<<< HEAD
-from accounts.serializers import LoginSerializer, RegisterSerializer
-
-
-# Create your views here.
-=======
 from accounts.serializers import LoginSerializer, RegisterSerializer, UserSerializer
 
 
@@ -36,7 +27,6 @@ class UpdateProfile(generics.UpdateAPIView):
 
         return get_object_or_404(CustomUser, id=user_object)
 
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
 
 class RegisterView(generics.CreateAPIView):
     permission_classes = (AllowAny,)
@@ -58,18 +48,10 @@ class LoginView(GenericAPIView):
 
     def post(self, request):
         serializer = LoginSerializer(data=request.data, context={'request': request})
-<<<<<<< HEAD
-
-=======
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
         login(request, user)
         token, created = Token.objects.get_or_create(user=user)
-<<<<<<< HEAD
-
-=======
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
         return Response({'status': status.HTTP_200_OK, 'Token': token.key})
 
 
@@ -80,8 +62,4 @@ class LogoutView(GenericAPIView):
         print(request)
         request.user.auth_token.delete()
         logout(request)
-<<<<<<< HEAD
-        return Response('Successfully logged in!')
-=======
         return Response('Successfully logged out!')
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
