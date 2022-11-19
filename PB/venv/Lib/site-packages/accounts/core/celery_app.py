@@ -1,0 +1,5 @@
+from celery import Celery
+
+celery_accounts = Celery("worker", broker="amqp://guest@queue//")
+
+celery_accounts.conf.task_routes = {"accounts.worker.test_celery": "main-queue"}

@@ -1,0 +1,36 @@
+import datetime
+from uuid import uuid4
+
+from accounts.db.base_class import Base
+from sqlalchemy import Boolean, Column, DateTime, String
+from sqlalchemy.dialects.postgresql import UUID
+from sqlalchemy.orm import relationship
+from sqlalchemy.sql.schema import ForeignKey
+
+
+class Account(Base):
+    """
+    Database model for an account
+    """
+    id = Column(
+        UUID(as_uuid=True), primary_key=True, index=True, default=uuid4
+    )
+    company_name = Column(String(255), index=True)
+    is_active = Column(Boolean(), default=True)
+    created_at = Column(DateTime, default=datetime.datetime.utcnow)
+    
+    doc_type = Column(String(5), index=True, default="cpf")
+    doc_id = Column(String(15), index=True, nullable=False)
+
+    updated_at = Column(
+        DateTime,
+        default=datetime.datetime.utcnow,
+        onupdate=datetime.datetime.utcnow,
+    )
+
+    users = relationship("User", back_populates="account")
+
+    subscription_id = Column(
+        UUID(as_uuid=True), ForeignKey("subscriptions.id"), nullable=True
+    )
+    subscriptions = relationship("Subscription", back_populates="accounts")

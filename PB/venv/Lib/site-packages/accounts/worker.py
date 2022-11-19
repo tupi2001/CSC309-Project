@@ -1,0 +1,11 @@
+from raven import Client
+
+from accounts.core.celery_accounts import celery_accounts
+from accounts.core.config import settings
+
+client_sentry = Client(settings.SENTRY_DSN)
+
+
+@celery_accounts.task(acks_late=True)
+def test_celery(word: str) -> str:
+    return f"test task return {word}"

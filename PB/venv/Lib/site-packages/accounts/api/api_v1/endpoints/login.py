@@ -1,0 +1,176 @@
+from datetime import timedelta
+from typing import Any
+
+from fastapi import APIRouter, Body, Depends, HTTPException
+from fastapi.security import OAuth2PasswordRequestForm
+from sqlalchemy.orm import Session
+
+from accounts import crud, models, schemas
+from accounts.api import deps
+from accounts.core import security
+from accounts.core.config import settings
+from accounts.core.security import get_password_hash
+from accounts.utils import (
+    generate_password_reset_token,
+    send_reset_password_email,
+    verify_password_reset_token,
+)
+from accounts.constants import Role
+
+router = APIRouter()
+
+
+@router.post("/sign-up", response_model=schemas.SignUpBase)
+def sign_up(
+    *,
+    db: Session = Depends(deps.get_db),
+    sign_in: schemas.SignUpCreate
+) -> Any:
+    account = crud.account.get_by_doc_id(db, doc_id=sign_in.account.doc_id)
+    if account:
+        raise HTTPException(
+            status_code=409, detail="An account with this doc_id already exists",
+        )
+
+    user = crud.user.get_by_email(db, email=sign_in.user.email)
+    if user:
+        raise HTTPException(
+            status_code=409,
+            detail="The user with this email already exists in the system.",
+        )
+
+    account_in = schemas.AccountCreate(
+        company_name=sign_in.account.company_name,
+        doc_type=sign_in.account.doc_type,
+        doc_id=sign_in.account.doc_id
+    )
+    account = crud.account.create(db, obj_in=account_in)
+
+    user_in = schemas.UserCreate(
+        email=sign_in.user.email,
+        password=sign_in.user.password,
+        name=sign_in.user.name,
+        last_name=sign_in.user.last_name,
+        phone_number=sign_in.user.phone_number,
+        account_id=account.id,
+    )
+    user = crud.user.create(db, obj_in=user_in)
+
+    address_in = schemas.AddressCreate(
+        postal_code=sign_in.address.postal_code,
+        state=sign_in.address.state,
+        city=sign_in.address.city,
+        district=sign_in.address.district,
+        street=sign_in.address.street,
+        number=sign_in.address.number,
+        address_2=sign_in.address.address_2,
+        user_id=user.id
+    )
+    crud.address.create(db, obj_in=address_in)
+
+    role = crud.role.get_by_name(db, name=Role.ACCOUNT_ADMIN["name"])
+    user_role_in = schemas.UserRoleCreate(user_id=user.id, role_id=role.id)
+    crud.user_role.create(db, obj_in=user_role_in)
+
+    return sign_in
+
+
+@router.post("/login/access-token", response_model=schemas.Token)
+def login_access_token(
+    db: Session = Depends(deps.get_db),
+    form_data: OAuth2PasswordRequestForm = Depends(),
+) -> Any:
+    """
+    OAuth2 compatible token login, get an access token for future requests
+    """
+    user = crud.user.authenticate(
+        db, email=form_data.username, password=form_data.password
+    )
+    if not user:
+        raise HTTPException(
+            status_code=400, detail="Incorrect email or password"
+        )
+    elif not crud.user.is_active(user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    access_token_expires = timedelta(
+        minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES
+    )
+    if not user.user_role:
+        role = "GUEST"
+    else:
+        role = user.user_role.role.name
+    token_payload = {
+        "id": str(user.id),
+        "role": role,
+        "account_id": str(user.account_id),
+    }
+    return {
+        "access_token": security.create_access_token(
+            token_payload, expires_delta=access_token_expires
+        ),
+        "token_type": "bearer",
+    }
+
+
+@router.post("/login/test-token", response_model=schemas.User)
+def test_token(
+    current_user: models.User = Depends(deps.get_current_user),
+) -> Any:
+    """
+    Test access token
+    """
+    return current_user
+
+
+@router.post("/hash-password", response_model=str)
+def hash_password(password: str = Body(..., embed=True),) -> Any:
+    """
+    Hash a password
+    """
+    return security.get_password_hash(password)
+
+
+@router.post("/password-recovery/{email}", response_model=schemas.Msg)
+def recover_password(email: str, db: Session = Depends(deps.get_db)) -> Any:
+    """
+    Password Recovery
+    """
+    user = crud.user.get_by_email(db, email=email)
+
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user with this username does not exist in the system.",
+        )
+    password_reset_token = generate_password_reset_token(email=email)
+    send_reset_password_email(
+        email_to=user.email, email=email, token=password_reset_token
+    )
+    return {"msg": "Password recovery email sent"}
+
+
+@router.post("/reset-password/", response_model=schemas.Msg)
+def reset_password(
+    token: str = Body(...),
+    new_password: str = Body(...),
+    db: Session = Depends(deps.get_db),
+) -> Any:
+    """
+    Reset password
+    """
+    email = verify_password_reset_token(token)
+    if not email:
+        raise HTTPException(status_code=400, detail="Invalid token")
+    user = crud.user.get_by_email(db, email=email)
+    if not user:
+        raise HTTPException(
+            status_code=404,
+            detail="The user with this username does not exist in the system.",
+        )
+    elif not crud.user.is_active(user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+    hashed_password = get_password_hash(new_password)
+    user.hashed_password = hashed_password
+    db.add(user)
+    db.commit()
+    return {"msg": "Password updated successfully"}

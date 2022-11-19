@@ -1,0 +1,43 @@
+from typing import Optional
+
+from pydantic import BaseModel
+from pydantic.types import UUID4
+
+
+# Shared properties
+class AddressBase(BaseModel):
+    postal_code: str
+    state: str
+    city: str
+    district: str
+    street: str
+    number: int
+    address_2: Optional[str] = None
+
+
+# Properties to receive on Address creation
+class AddressCreate(AddressBase):
+    user_id: Optional[UUID4]
+
+
+# Properties to receive on Address update
+class AddressUpdate(AddressBase):
+    pass
+
+
+# Properties shared by models stored in DB
+class AddressInDBBase(AddressBase):
+    id: UUID4
+
+    class Config:
+        orm_mode = True
+
+
+# Properties to return to client
+class Address(AddressInDBBase):
+    pass
+
+
+# Properties properties stored in DB
+class AddressInDB(AddressInDBBase):
+    pass

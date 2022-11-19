@@ -1,0 +1,41 @@
+from typing import Optional
+
+from pydantic import BaseModel
+
+from accounts.schemas.account import AccountBase
+from accounts.schemas.user import UserBase
+from accounts.schemas.address import AddressBase
+
+
+# Shared properties
+class SignUpBase(BaseModel):
+    account: AccountBase
+    user: UserBase
+    address: AddressBase
+
+    class Config:
+        orm_mode = True
+
+# Properties to receive on SignUp creation
+class SignUpCreate(SignUpBase):
+    pass
+
+
+# Properties to receive on SignUp update
+class SignUpUpdate(SignUpBase):
+    pass
+
+
+# Properties shared by models stored in DB
+class SignUpInDBBase(SignUpBase):
+    pass
+
+
+# Properties to return to client
+class SignUp(SignUpInDBBase):
+    pass
+
+
+# Properties properties stored in DB
+class SignUpInDB(SignUpInDBBase):
+    pass
