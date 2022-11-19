@@ -4,16 +4,11 @@ from django.db import models
 from django.core.validators import EmailValidator
 from rest_framework import serializers
 from accounts.models import CustomUser
-<<<<<<< HEAD
-=======
 from django.contrib.auth import get_user_model
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.status import HTTP_200_OK
 
-<<<<<<< HEAD
-=======
 class UserSerializer(serializers.ModelSerializer):
     model = CustomUser
     class Meta:
@@ -21,7 +16,6 @@ class UserSerializer(serializers.ModelSerializer):
         fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number']
         read_only_field = ['password', 'password2']
 
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
 
 class RegisterSerializer(serializers.ModelSerializer):
 
@@ -111,13 +105,10 @@ class LoginSerializer(serializers.ModelSerializer):
     username = serializers.CharField()
     password = serializers.CharField()
 
-<<<<<<< HEAD
-=======
     class Meta:
         model = CustomUser
         fields = ['username', 'password']
 
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
     def validate(self, data):
         username = data.get('username')
         password = data.get('password')

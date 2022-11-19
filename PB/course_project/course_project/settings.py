@@ -40,10 +40,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'studios',
-<<<<<<< HEAD
     'subscriptions',
-=======
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
     'rest_framework.authtoken',
 ]
 
@@ -138,10 +135,7 @@ MEDIA_URL = 'media/'
 REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.TokenAuthentication',
-<<<<<<< HEAD
-=======
         'rest_framework.authentication.SessionAuthentication',
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
     ],
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.IsAuthenticated',
