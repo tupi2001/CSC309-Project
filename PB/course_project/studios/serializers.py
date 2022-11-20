@@ -5,9 +5,9 @@ class StudioSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Studio
-        fields = ['id', 'name', 'address', 'latitude',
-<<<<<<< HEAD
-                  'longitude', 'postal', 'phone_number']
-=======
-                  'longitude', 'postal', 'phone_number']
->>>>>>> 50a7af8f06d3a7344799114325fdbcff1fbb1e18
+        fields = ['name', 'address', 'latitude',
+                  'longitude', 'postal_code', 'phone_number']
+
+class DistanceSerializer(serializer.Serializer):
+    latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
+    longitude = serializers.DecimalField(max_digits=9, decimal_places=6)

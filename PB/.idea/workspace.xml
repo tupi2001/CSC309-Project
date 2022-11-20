@@ -1,11 +1,28 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="472d727f-b654-4a70-9546-c3588b9f00c6" name="Default Changelist" comment="" />
+    <list default="true" id="eeca6e68-f001-4eda-b21f-151068ce8404" name="Default Changelist" comment="">
+      <change afterPath="$PROJECT_DIR$/course_project/studios/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2022_10_53_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2022_10_53_PM__Default_Changelist_.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/course_project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/course_project/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/db.sqlite3" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/studios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/admin.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/studios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/studios/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/studios/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/views.py" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
     <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Python Script" />
+      </list>
+    </option>
   </component>
   <component name="Git.Settings">
     <option name="RECENT_BRANCH_BY_REPOSITORY">
@@ -26,13 +43,59 @@
     <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
     <property name="nodejs_interpreter_path.stuck_in_default_project" value="undefined stuck path" />
     <property name="nodejs_npm_path_reset_for_default_project" value="true" />
-    <property name="settings.editor.selected.configurable" value="com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable" />
+    <property name="settings.editor.selected.configurable" value="preferences.pluginManager" />
+    <property name="settings.editor.splitter.proportion" value="0.21635611" />
   </component>
-  <component name="RunManager" selected="Python.serializers">
+  <component name="RunManager" selected="Python.models">
+    <configuration default="true" type="PythonConfigurationType" factoryName="Python">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="models" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/course_project/studios" />
+      <option name="IS_MODULE_SDK" value="false" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <module name="" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/course_project/studios/models.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="true" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
     <configuration name="serializers" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="PB" />
       <option name="INTERPRETER_OPTIONS" value="" />
       <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
       <option name="SDK_HOME" value="" />
       <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/course_project/accounts" />
       <option name="IS_MODULE_SDK" value="true" />
@@ -91,9 +154,9 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.models" />
+        <item itemvalue="Python.models" />
         <item itemvalue="Python.serializers" />
-        <item itemvalue="Python.views" />
-        <item itemvalue="Python.settings" />
         <item itemvalue="Python.views" />
         <item itemvalue="Python.settings" />
       </list>
