@@ -10,8 +10,6 @@ class SubscriptionSerializer(serializers.ModelSerializer):
 
 
 class CardSerializer(serializers.ModelSerializer):
-    user = CurrentUserDefault
-
     class Meta:
         model = Card
         fields = ('user', 'name', 'card')
@@ -25,23 +23,19 @@ class CardSerializer(serializers.ModelSerializer):
         return card
 
     def create(self, validated_data):
-        card = Card(user = CurrentUserDefault, name = validated_data['name'], card = validated_data['card'])
+        card = Card(user = validated_data['user'], name = validated_data['name'], card = validated_data['card'])
         card.save()
         return card
 
     
 class PaymentSerializer(serializers.ModelSerializer):
-    user = CurrentUserDefault
-    subscription = SubscriptionSerializer(source='subscription')
-
     class Meta:
         model = Payment
-        fields = ('user', 'subscription', 'card')
+        fields = ('user', 'subscription', 'date', 'card')
 
 class UserSubSerializer(serializers.ModelSerializer):
     user = CurrentUserDefault
-    subscription = SubscriptionSerializer(source='subscription')
 
     class Meta:
         model = UserSub
-        fields = ('user', 'subscription', 'card_information', 'active', 'renew')
+        fields = ('user', 'subscription', 'card', 'renew')

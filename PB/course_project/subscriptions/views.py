@@ -11,14 +11,13 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .forms import CardInformation
 from .models import Subscriptions, Card, Payment, UserSub
 from .serializers import SubscriptionSerializer, CardSerializer, UserSubSerializer, PaymentSerializer
 
 # Create your views here.
 
 class AddCard(generics.CreateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = CardSerializer
 
     def post(self, request, *args, **kwargs):
@@ -26,44 +25,94 @@ class AddCard(generics.CreateAPIView):
 
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
         
-        return Response({'status': status.HTTP_200_OK, 'Token': token.key})
+        return Response({'status': status.HTTP_200_OK})
 
 class UpdateCard(generics.UpdateAPIView):
-    # permission_classes = [IsAuthenticated]
+    queryset = Card.objects.all()
+    permission_classes = [IsAuthenticated]
     serializer_class = CardSerializer
 
-    def get_object(self):
-        user_obj = self.request.user.pk
+    def patch(self, request, *args, **kwargs):
+        card_object = self.get_object()
+        # data = request.data
 
-        return get_object_or_404(Card, user=user_obj)
+        serializer = self.get_serializer(card_object, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response({"message": "Updated successfully"})
+
+        else:
+            return Response({"message": "failed", "details": serializer.errors})
+
+        if card_object.user == self.request.user:
+            card_object.name = data.get('name', card_object.name)
+            card_object.card = data.get('card', card_object.card)
+
+            card_object.save()
+            serializer = CardSerializer(card_object)
+            return Response(serializer.data)
+
+        return Response({'error': 'Unauthenticated'})
 
 class AddSubscription(generics.CreateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSubSerializer
 
     def post(self, request, *args, **kwargs):
-        serializer = UserSubSerializer(data=request.data, context={'request': request})
+        data = request.data
+
+        serializer = UserSubSerializer(data=data, context={'request': request})
 
         if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-            token, created = Token.objects.get_or_create(user=user)
-        
-        return Response({'status': status.HTTP_200_OK, 'Token': token.key})
+            serializer.save()
+
+            payment = PaymentSerializer(data=data)
+
+            if payment.is_valid(raise_exception=True):
+                payment.save()
+
+        return Response({'status': status.HTTP_200_OK})
 
 class UpdateSubscription(generics.UpdateAPIView):
-    # permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated]
     serializer_class = UserSubSerializer
 
-    def get_object(self):
-        user_obj = self.request.user.pk
+    def patch(self, request, *args, **kwargs):
+        sub_object = self.get_object()
+        data = request.data
 
-        return get_object_or_404(UserSub, user=user_obj)
+        if sub_object.user == self.request.user:
+            sub_object.name = data.get('subscription', sub_object.subscription)
+            sub_object.card = data.get('card_information', sub_object.card_information)
+            sub_object.renew = data.get('renew', sub_object.renew)
 
-@api_view(['GET'])
-def PaymentHistory(request):
-    if request.method == 'GET':
-        payment = Payment.objects.filter(user=request.user)
-        serializer = PaymentSerializer(payment, many=True)
-        return Response(serializer.data)
+            sub_object.save()
+            serializer = UserSubSerializer(sub_object)
+            return Response(serializer.data)
+
+        return Response({'error': 'Unauthenticated'})
+
+class PaymentHistory(generics.ListAPIView):
+    queryset = Payment.objects.all()
+    serializer_class = PaymentSerializer
+    permission_classes =  [IsAuthenticated]
+    search_fields = ('user')
+    paginate_by = 20
+
+    def get_queryset(self):
+        if not Payment.objects.filter(user=self.request.user).exists():
+            return Response('NOT FOUND', status=404)
+
+        payments = Payment.objects.filter(user = self.request.user)
+
+        payments_dict = {}
+
+        i = 1
+
+        for payment in payments:
+            object = payments.get(id=i)
+            payments_dict[object.date] = [object.user, object.card, object.subscription]
+
+        return payments

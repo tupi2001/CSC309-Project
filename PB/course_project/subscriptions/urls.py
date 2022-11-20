@@ -10,5 +10,5 @@ urlpatterns = [
     path('updatecard/', UpdateCard.as_view(), name='updatecard'),
     path('addsub/', AddSubscription.as_view(), name='addsub'),
     path('updatesub/', UpdateSubscription.as_view(), name='updatesub'),
-    path('paymenthistory/', PaymentHistory, name='paymenthistory'),
+    path('paymenthistory/', PaymentHistory.as_view(), name='paymenthistory'),
 ]

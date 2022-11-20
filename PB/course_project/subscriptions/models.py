@@ -4,7 +4,6 @@ from datetime import date
 from dateutil.relativedelta import relativedelta
 from accounts.models import CustomUser
 
-
 # Create your models here.
 
 DURATION = (
@@ -38,7 +37,7 @@ class Card(models.Model):
 
 class Payment(models.Model):
     user = models.ForeignKey(to=CustomUser, null=False, on_delete=models.CASCADE)
-    subscription = models.OneToOneField(Subscriptions, on_delete=models.CASCADE)
+    subscription = models.ForeignKey(to=Subscriptions, on_delete=models.CASCADE)
     date = models.DateTimeField(auto_now_add=True)
     card = models.OneToOneField(Card, on_delete=models.CASCADE, null=False)
 
@@ -47,9 +46,9 @@ class Payment(models.Model):
 
 class UserSub(models.Model):
     user = models.OneToOneField(to=CustomUser, null=False, on_delete=models.CASCADE, unique=True)
-    subscription = models.OneToOneField(Subscriptions, blank=True, on_delete=models.CASCADE)
-    card_information = models.OneToOneField(Card, blank=True, on_delete=models.CASCADE)
-    active = models.BooleanField(default=False)
+    subscription = models.ForeignKey(Subscriptions, blank=True, on_delete=models.CASCADE)
+    card = models.OneToOneField(Card, blank=True, on_delete=models.CASCADE)
+    active = models.BooleanField(default=True)
     renew = models.BooleanField(default=False)
     renew_date = models.DateTimeField(auto_now_add=True)
 
@@ -57,12 +56,14 @@ class UserSub(models.Model):
 
         if date.today >= self.renew_date:
             if self.renew:
-                if self.subscription.charge_every == 'Month':
+                if self.subscription.charge_every == 'mon':
                     self.renew_date = date.today + relativedelta(months=+1)
-                if self.subscription.charge_every == 'Year':
+                if self.subscription.charge_every == 'yea':
                     self.renew_date = date.today + relativedelta(years=1)
                 
                 # charge card in theory
+
+                self.save()
 
                 return True
 
