@@ -1,7 +1,8 @@
 from rest_framework import serializers
 
-from classes.models import Class
+from classes.models import Class, UserAndClass
 from studios.serializers import StudioSerializer
+from accounts.serializers import UserSerializer
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -10,4 +11,12 @@ class ClassSerializer(serializers.ModelSerializer):
     class Meta:
         model = Class
         fields = ['id', 'studio', 'name', 'description', 'coach', 
-            'keywords', 'capacity', 'start_time', 'end_time', 'end_date']
+            'keywords', 'capacity', 'recurrences', 'start_time', 'end_time']
+
+class UserAndClassSerializer(serializers.ModelSerializer):
+    classes = ClassSerializer()
+    users = UserSerializer()
+
+    class Meta:
+        model = UserAndClass
+        fields = ['class', 'users']

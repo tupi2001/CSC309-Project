@@ -1,14 +1,17 @@
 from django.db import models
-from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.base_user import BaseUserManager
 from django.contrib.auth.models import AbstractUser
-# from phonenumber_field.modelfields import PhoneNumberField
+# from classes.models import UserAndClass
+
 
 class AccountManager(BaseUserManager):
-    def create_user(self, email, username, password = None):
+    def create_user(self, email, username, password):
+        if not email or not username:
+            raise ValueError('This is a required field')
+
         user = self.model(
-            email = self.normalize_email(email),
-            username = username,
+            email=self.normalize_email(email),
+            username=username,
         )
 
         user.set_password(password)
@@ -34,11 +37,11 @@ class CustomUser(AbstractUser):
     first_name = models.CharField(max_length=100)
     last_name = models.CharField(max_length=100)
     email = models.EmailField(unique=True)
-    password = models.CharField(max_length=100, null=True, blank= True)
-    password2 = models.CharField(max_length=100, null=True, blank=True)
-    # phone_number = PhoneNumberField(null=False, blank = False, unique=True)
+    password = models.CharField(max_length=100, blank=True, null=True)
+    password2 = models.CharField(max_length=100, blank=True, null=True)
+    # phone_number = PhoneNumberField(null=False, blank=False, unique=True)
     phone_number = models.CharField(max_length=15)
-    avatar = models.ImageField(null = True)
+    avatar = models.ImageField(null=True)
     is_admin = models.BooleanField(default=False)
     is_staff = models.BooleanField(default=False)
     is_superuser = models.BooleanField(default=False)
