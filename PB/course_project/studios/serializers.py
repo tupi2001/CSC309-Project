@@ -8,6 +8,6 @@ class StudioSerializer(serializers.ModelSerializer):
         fields = ['name', 'address', 'latitude',
                   'longitude', 'postal_code', 'phone_number']
 
-class DistanceSerializer(serializer.Serializer):
+class DistanceSerializer(serializers.Serializer):
     latitude = serializers.DecimalField(max_digits=9, decimal_places=6)
     longitude = serializers.DecimalField(max_digits=9, decimal_places=6)
