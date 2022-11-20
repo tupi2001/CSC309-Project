@@ -56,14 +56,14 @@ class RegisterSerializer(serializers.ModelSerializer):
 
         return email
 
-    def validate_phone_number(self, data):
-        phone_number = data
-        phone_regex = re.compile('^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$')
+    # def validate_phone_number(self, data):
+    #     phone_number = data
+    #     phone_regex = re.compile('^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$')
 
-        if not phone_regex.match(phone_number):
-            raise serializers.ValidationError('Phone number invalid')
+    #     if not phone_regex.match(phone_number):
+    #         raise serializers.ValidationError('Phone number invalid')
 
-        return phone_number
+    #     return phone_number
 
     def validate(self, validated_data):
         password = validated_data['password']

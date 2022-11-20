@@ -8,35 +8,39 @@ from rest_framework.response import Response
 from classes.serializers import ClassSerializer, UserAndClassSerializer
 from django.utils.timezone import now
 from django.http import JsonResponse
-
+from rest_framework import generics, permissions, status
 
 class CreateClassView(CreateAPIView):
-    # permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
 
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
 
     def post(self, request):
-        serializer = serializer.ClassSerializer(data=request.data)
+        print("hello")
+        serializer = ClassSerializer(data=request.data, context={'request': request})
         if serializer.is_valid():
             serializer.save()
+            print(serializer.id)
         
-        return Response({'status': request.status.HTTP_200_OK})
+        return Response({'status': status.HTTP_200_OK})
 
 
 class UpdateClassView(UpdateAPIView):
-    permission_classes = [IsAdminUser]
+    permission_classes = [IsAuthenticated]
     queryset = Class.objects.all()
     serializer_class = ClassSerializer
     lookup_field = 'id'
-
-    def update(self, request):
-        instance = self.get_object()
-        serializer = serializer.ClassSerializer(instance, data=request.data)
+  
+    def post(self, request, *args, **kwargs):
+        instance = get_object_or_404(Class, pk=self.kwargs['class_id'])
+        serializer = ClassSerializer(instance, data=request.data)
         if serializer.is_valid():
             serializer.save()
 
         return Response(serializer.data)
+    # def post(self):
+    #     return get_object_or_404(Class, id=self.kwargs['class_id'])
 
 
 class DeleteClassView(DestroyAPIView):
