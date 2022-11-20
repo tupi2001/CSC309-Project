@@ -2,14 +2,16 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="eeca6e68-f001-4eda-b21f-151068ce8404" name="Default Changelist" comment="">
-      <change afterPath="$PROJECT_DIR$/course_project/studios/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2022_10_53_PM__Default_Changelist_.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/shelf/Uncommitted_changes_before_Checkout_at_11_16_2022_10_53_PM__Default_Changelist_.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/accounts/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/accounts/models.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/accounts/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/accounts/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/accounts/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/accounts/urls.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/accounts/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/accounts/views.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/course_project/course_project/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/course_project/urls.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/course_project/db.sqlite3" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/db.sqlite3" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/course_project/studios/admin.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/admin.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/course_project/studios/models.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/models.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/course_project/studios/serializers.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/serializers.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/course_project/studios/urls.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/urls.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/course_project/studios/views.py" beforeDir="false" afterPath="$PROJECT_DIR$/course_project/studios/views.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />

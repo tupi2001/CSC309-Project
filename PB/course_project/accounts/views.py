@@ -14,24 +14,28 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
-# from accounts.serializers import LoginSerializer, RegisterSerializer, UserSerializer, UserSerializer2, GetUserSerializer
 from accounts.serializers import CreateUserSerializer
 
 
 class CreateUserView(CreateAPIView):
+    """Create a user view to allow creation of a new user"""
     permission_classes = [AllowAny, ]
     serializer_class = CreateUserSerializer
 
 
 class EditProfileView(UpdateAPIView):
+    """Allow user to update or edit their profile"""
     permission_classes = [IsAuthenticated]
     queryset = CustomUser.objects.all()
     serializer_class = CreateUserSerializer
 
     def patch(self, request, *args, **kwargs):
+        """Patch method to update data of a specific user"""
         user_object = self.get_object()
         data = request.data
 
+        #  check if the user_object and the requested user are the same
+        # update user object fields and save new user information, then return response
         if user_object == self.request.user:
             user_object.username = data.get('username', user_object.username)
             user_object.set_password = data.get('password', user_object.password)
@@ -45,79 +49,5 @@ class EditProfileView(UpdateAPIView):
             serializer = CreateUserSerializer(user_object)
             return Response(serializer.data)
 
+        # user is not authorized to access this user information
         return Response({'error': 'Unauthenticated'})
-
-# class UpdateProfile2(generics.UpdateAPIView):
-#     queryset = CustomUser.objects.all()
-#     permission_classes = [IsAuthenticated]
-#     # authentication_classes = [SessionAuthentication]
-#     serializer_class = UserSerializer2
-#
-#     def post(self, request, *args, **kwargs):
-#         print(self.request.user.pk, request.data)
-#         serializer = UserSerializer2(self.request.user.pk, data=request.data)
-#         # print(serializer)
-#         return Response({'status': status.HTTP_200_OK})
-#
-#
-# # Create your views here.
-# class UpdateProfile(generics.UpdateAPIView):
-#     queryset = CustomUser.objects.all()
-#     permission_classes = [IsAuthenticated]
-#     # authentication_classes = [SessionAuthentication]
-#     serializer_class = UserSerializer
-#
-#     # permission_classes = [IsAuthenticated]
-#     # serializer_class = UserSerializer
-#
-#     def get_object(self):
-#         user_object = self.request.user.pk  # primary key
-#         return get_object_or_404(CustomUser, id=user_object)
-#
-#
-# class GetProfile(generics.RetrieveAPIView):
-#     queryset = CustomUser.objects.all()
-#     permission_classes = [IsAuthenticated]
-#     serializer_class = GetUserSerializer
-#     # authentication_classes = [SessionAuthentication]
-#
-#     def get_object(self):
-#         user_object = self.request.user.pk  # primary key
-#         return get_object_or_404(CustomUser, id=user_object)
-#
-#
-# class RegisterView(generics.CreateAPIView):
-#     permission_classes = (AllowAny,)
-#     serializer_class = RegisterSerializer
-#
-#     def post(self, request, *args, **kwargs):
-#         serializer = RegisterSerializer(data=request.data, context={'request': request})
-#
-#         if serializer.is_valid(raise_exception=True):
-#             user = serializer.save()
-#             token, created = Token.objects.get_or_create(user=user)
-#
-#         return Response({'status': status.HTTP_200_OK, 'Token': token.key})
-#
-#
-# class LoginView(GenericAPIView):
-#     serializer_class = LoginSerializer
-#     permission_classes = (AllowAny,)
-#
-#     def post(self, request):
-#         serializer = LoginSerializer(data=request.data, context={'request': request})
-#         serializer.is_valid(raise_exception=True)
-#         user = serializer.validated_data['user']
-#         login(request, user)
-#         token, created = Token.objects.get_or_create(user=user)
-#         return Response({'status': status.HTTP_200_OK, 'Token': token.key})
-#
-#
-# class LogoutView(GenericAPIView):
-#     permission_classes = [IsAuthenticated]
-#
-#     def get(self, request):
-#         print(request)
-#         request.user.auth_token.delete()
-#         logout(request)
-#         return Response('Successfully logged out!')

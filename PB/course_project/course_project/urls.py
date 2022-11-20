@@ -16,11 +16,12 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 
+# user can access classes, accounts, studios and subscriptions using specific urls
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('classes/', include('classes.urls', namespace='classes')),
-    # path('subscriptions/', include('subscriptions.urls', namespace='subscriptions')),
     path('studios/', include('studios.urls', namespace='studios')),
     path("api-auth/", include("rest_framework.urls")),
 ]
