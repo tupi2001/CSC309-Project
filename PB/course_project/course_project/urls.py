@@ -21,5 +21,6 @@ urlpatterns = [
     path('accounts/', include('accounts.urls', namespace='accounts')),
     path('classes/', include('classes.urls', namespace='classes')),
     # path('subscriptions/', include('subscriptions.urls', namespace='subscriptions')),
+    path('studios/', include('studios.urls', namespace='studios')),
     path("api-auth/", include("rest_framework.urls")),
 ]

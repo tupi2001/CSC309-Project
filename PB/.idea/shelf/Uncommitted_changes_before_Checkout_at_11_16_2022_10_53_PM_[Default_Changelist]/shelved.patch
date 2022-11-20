@@ -1,0 +1,76 @@
+Index: course_project/accounts/serializers.py
+IDEA additional info:
+Subsystem: com.intellij.openapi.diff.impl.patch.BaseRevisionTextPatchEP
+<+>import re\r\nfrom django.contrib.auth import authenticate\r\nfrom django.db import models\r\nfrom django.core.validators import EmailValidator\r\nfrom rest_framework import serializers\r\nfrom accounts.models import CustomUser\r\nfrom rest_framework.authtoken.models import Token\r\nfrom rest_framework.response import Response\r\nfrom rest_framework.status import HTTP_200_OK\r\n\r\n\r\nclass RegisterSerializer(serializers.ModelSerializer):\r\n    class Meta:\r\n        model = CustomUser\r\n        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number', 'password', 'password2']\r\n\r\n    def validate_username(self, data):\r\n        username = data\r\n\r\n        if not username:\r\n            raise serializers.ValidationError(\"This is a required field\")\r\n\r\n        if len(username) < 4:\r\n            raise serializers.ValidationError(\"Username must contain at least 4 characters\")\r\n\r\n        if CustomUser.objects.filter(username=username).exists():\r\n            raise serializers.ValidationError(\"Username already exists\")\r\n\r\n        return username\r\n\r\n    def validate_email(self, data):\r\n        email = data\r\n\r\n        if email != '':\r\n            validator = EmailValidator(message='Email invalid')\r\n            validator(email)\r\n\r\n        return email\r\n\r\n    def validate_phone_number(self, data):\r\n        phone_number = data\r\n        phone_regex = re.compile('^(\\+\\d{1,2}\\s)?\\(?\\d{3}\\)?[\\s.-]\\d{3}[\\s.-]\\d{4}$')\r\n\r\n        if not phone_regex.match(phone_number):\r\n            raise serializers.ValidationError('Phone number invalid')\r\n\r\n        return phone_number\r\n\r\n    def validate_password(self, data):\r\n        password = data['password']\r\n        password2 = data['password2']\r\n\r\n        if not password:\r\n            raise serializers.ValidationError('This is a required field')\r\n        if password != '':\r\n\r\n            if len(password) < 8:\r\n                raise serializers.ValidationError('Password too short. Must be at least 8 characters')\r\n\r\n            if password != password2:\r\n                raise serializers.ValidationError(\"Two passwords don't match\")\r\n\r\n        return data\r\n\r\n    def create(self, data):\r\n        if 'avatar' in data:\r\n            avatar = data[\"avatar\"]\r\n        else:\r\n            avatar = None\r\n        \r\n        user = CustomUser.objects.create(\r\n            first_name=data['first_name'],\r\n            last_name=data['last_name'],\r\n            phone_number=data['phone_number'],\r\n            avatar=avatar,\r\n            username=data['username'],\r\n            email=data['email']\r\n        )\r\n\r\n        user.set_password(data['password'])\r\n        user.save()\r\n\r\n        return user\r\n\r\nclass LoginSerializer(serializers.Serializer):\r\n    username = serializers.CharField()\r\n    password = serializers.CharField()\r\n\r\n\r\n    def validate(self, data):\r\n        username = data.get('username')\r\n        password = data.get('password')\r\n\r\n        if not username:\r\n            raise serializers.ValidationError(\"Username is required\")\r\n        if not password:\r\n            raise serializers.ValidationError(\"Password is required\")\r\n\r\n        user = CustomUser.objects.filter(username=username)\r\n        if user.exists() and user.count() == 1:\r\n            user_object = user.first()\r\n        else:\r\n            raise serializers.ValidationError(\r\n                \"Username or Email is invalid.\")\r\n\r\n        if user_object:\r\n            if not user_object.check_password(password):\r\n                raise serializers.ValidationError(\"Invalid credentials.\")\r\n\r\n        data['user'] = user_object\r\n        return data
+Subsystem: com.intellij.openapi.diff.impl.patch.CharsetEP
+<+>UTF-8
+===================================================================
+diff --git a/course_project/accounts/serializers.py b/course_project/accounts/serializers.py
+--- a/course_project/accounts/serializers.py	(revision 63f39bc3d42bb48bac34e096ccffacb76931b2fb)
++++ b/course_project/accounts/serializers.py	(date 1668657174798)
+@@ -12,7 +12,8 @@
+ class RegisterSerializer(serializers.ModelSerializer):
+     class Meta:
+         model = CustomUser
+-        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number', 'password', 'password2']
++        fields = ['first_name', 'last_name', 'username', 'email', 'avatar', 'phone_number',
++                  'password', 'password2']
+ 
+     def validate_username(self, data):
+         username = data
+@@ -46,28 +47,29 @@
+ 
+         return phone_number
+ 
+-    def validate_password(self, data):
+-        password = data['password']
+-        password2 = data['password2']
++    def validate(self, validated_data):
++        password = validated_data['password']
++        password2 = validated_data['password2']
+ 
+         if not password:
+             raise serializers.ValidationError('This is a required field')
+         if password != '':
+ 
+             if len(password) < 8:
+-                raise serializers.ValidationError('Password too short. Must be at least 8 characters')
++                raise serializers.ValidationError(
++                    'Password too short. Must be at least 8 characters')
+ 
+             if password != password2:
+                 raise serializers.ValidationError("Two passwords don't match")
+ 
+-        return data
++        return validated_data
+ 
+     def create(self, data):
+         if 'avatar' in data:
+             avatar = data["avatar"]
+         else:
+             avatar = None
+-        
++
+         user = CustomUser.objects.create(
+             first_name=data['first_name'],
+             last_name=data['last_name'],
+@@ -82,11 +84,11 @@
+ 
+         return user
+ 
++
+ class LoginSerializer(serializers.Serializer):
+     username = serializers.CharField()
+     password = serializers.CharField()
+ 
+-
+     def validate(self, data):
+         username = data.get('username')
+         password = data.get('password')
+@@ -108,4 +110,4 @@
+                 raise serializers.ValidationError("Invalid credentials.")
+ 
+         data['user'] = user_object
+-        return data
+\ No newline at end of file
++        return data

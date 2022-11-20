@@ -2,7 +2,7 @@ from rest_framework import serializers
 
 from classes.models import Class, UserAndClass
 from studios.serializers import StudioSerializer
-from accounts.serializers import UserSerializer
+from accounts.serializers import CreateUserSerializer
 
 
 class ClassSerializer(serializers.ModelSerializer):
@@ -15,7 +15,7 @@ class ClassSerializer(serializers.ModelSerializer):
 
 class UserAndClassSerializer(serializers.ModelSerializer):
     classes = ClassSerializer()
-    users = UserSerializer()
+    users = CreateUserSerializer()
 
     class Meta:
         model = UserAndClass

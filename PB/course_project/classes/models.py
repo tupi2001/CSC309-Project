@@ -23,5 +23,5 @@ class Class(models.Model):
 
 
 class UserAndClass(models.Model):
-    user = models.ForeignKey(CustomUser, on_delete=CASCADE)
-    gym_class = models.ForeignKey(Class, on_delete=CASCADE)
+    user = models.ForeignKey(CustomUser, on_delete=CASCADE, default=1)
+    gym_class = models.ForeignKey(Class, on_delete=CASCADE, default=1)
