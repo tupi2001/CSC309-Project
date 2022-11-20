@@ -40,7 +40,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'accounts',
     'studios',
-    'subscriptions',
+    'classes',
+    'recurrence',
+    # 'subscriptions',
     'rest_framework.authtoken',
 ]
 

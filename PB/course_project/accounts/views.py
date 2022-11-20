@@ -8,13 +8,14 @@ from rest_framework import generics, permissions, status
 from rest_framework.authentication import TokenAuthentication
 from rest_framework.authtoken.models import Token
 from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import GenericAPIView, RetrieveAPIView, UpdateAPIView
+from rest_framework.generics import GenericAPIView, RetrieveAPIView, UpdateAPIView, ListAPIView
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from accounts.models import CustomUser
 from accounts.serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from classes.models import UserAndClass
 
 
 # Create your views here.
@@ -63,3 +64,17 @@ class LogoutView(GenericAPIView):
         request.user.auth_token.delete()
         logout(request)
         return Response('Successfully logged out!')
+
+
+class ClassesView(ListAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def get_queryset(self):
+        response = {}
+        classes = UserAndClass.objects.filter(users=self)
+        for gym_class in classes:
+            class_info = gym_class.__dict__
+            # class_info.pop('users')
+            response[class_info['name']] = class_info.pop('name')
+
+        return JsonResponse(response)
