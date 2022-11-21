@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from classes.models import Class, UserAndClass
+from classes.models import GymClass, UserAndClass
 from studios.serializers import StudioSerializer
 from accounts.serializers import UserSerializer
 
@@ -8,65 +8,137 @@ from dateutil.relativedelta import *
 from dateutil.easter import *
 from dateutil.rrule import *
 from dateutil.parser import *
-import datetime
+from datetime import *
+import json
 
 
 class ClassSerializer(serializers.ModelSerializer):
-    studio = StudioSerializer()
-
+    frequency = serializers.CharField()
+    # print("hello22")
+    # weekday = serializers.CharField()
     class Meta:
-        model = Class
-        fields = ['id', 'studio', 'name', 'description', 'coach', 
-            'keywords', 'capacity', 'start_time', 'end_time']
+        model = GymClass
+        fields = ['studio', 'name', 'description', 'coach', 
+            'keywords', 'capacity', 'frequency', 'weekday', 'start_date', 
+            'end_date', 'start_time', 'end_time']
 
-    def frequency(self):
-        if self.frequency not in {YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY}:
-            raise ValueError('Please enter a valid frequency')
-        if self.weekday not in {MO, TU, WE, TH, FR, SA, SU}:
-            raise ValueError('Please enter a valid weekday')
+    def frequency_validate(self, data):
+        print("frequency")
+        frequency = data
+        if frequency not in {'YEARLY', 'MONTHLY', 'WEEKLY', 'DAILY', 'HOURLY'}:
+            # raise ValueError('Please enter a valid frequency')
+            raise serializers.ValidationError('Please enter a valid frequency')
+        return frequency
 
-        start = self.start_date
-        date_format = '%m/%d/%Y'
-        try:
-            datetime.datetime.strptime(start, date_format)
-        except ValueError:
-            raise ValueError('Please enter a valid date')
-        start_date = datetime.strptime(start, '%m/%d/%y')
-
-        end = self.end_date
-        try:
-            datetime.datetime.strptime(end, date_format)
-        except ValueError:
-            raise ValueError('Please enter a valid date')
-        end_date = datetime.strptime(end, '%m/%d/%y')
-        count = relativedelta(start_date, end_date).weeks  # number of recurring classes there should be
-
-        dates = list(rrule(self.frequency, count=count, byweekday=self.weekday, dtstart=start_date))
-        return dates
+    def weekday_validate(self, data):
+        print("weekday")
+        weekday = data
+        if weekday not in {'MO', 'TU', 'WE', 'TH', 'FR', 'SA', 'SU'}:
+            raise serializers.ValidationError('Please enter a valid weekday')
+        return weekday
 
     def create(self, data):
-        dates = self.frequency()
+        print("create")
+        print("hello2")
+        start = data['start_date']
+        frequency = data['frequency']
+
+        if frequency == 'YEARLY':
+            freq = YEARLY
+        if frequency == 'MONTHLY':
+            freq = MONTHLY
+        if frequency == 'WEEKLY':
+            freq = WEEKLY
+        if frequency == 'DAILY':
+            freq = DAILY
+        if frequency == 'HOURLY':
+            freq = HOURLY
+
+        weekday = data['weekday']
+        if weekday == 'MO':
+            wday = MO
+        if weekday == 'TU':
+            wday = TU
+        if weekday == 'WE':
+            wday = WE
+        if weekday == 'TH':
+            wday = TH
+        if weekday == 'FR':
+            wday = FR
+        if weekday == 'SA':
+            wday = SA
+        if weekday == 'SU':
+            wday = SU
+
+        date_format = '%m/%d/%Y'
+        try:
+            datetime.strptime(start, date_format)
+        except ValueError:
+            raise ValueError('Please enter a valid date')
+        start_date = datetime.strptime(start, '%m/%d/%Y')
+
+        end = data['end_date']
+        try:
+            datetime.strptime(end, date_format)
+        except ValueError:
+            raise serializers.ValidationError('Please enter a valid date')
+        end_date = datetime.strptime(end, '%m/%d/%Y')
+        count = abs(relativedelta(start_date, end_date).weeks) + 1  # number of recurring classes there should be
+
+        dates = list(rrule(freq=freq, count=count, byweekday=wday, dtstart=start_date))
 
         for date in dates:
-            gym_class = Class.objects.create(
+            gym_class = GymClass.objects.create(
                 studio = data['studio'],
                 name=data['name'],
                 description=data['description'],
                 keywords=data['keywords'],
                 capacity=data['capacity'],
-                frequency=data['frequency'], 
+                # frequency=data['frequency'], 
                 weekday=data['weekday'], 
                 start_date=data['start_date'],
+                start_time=data['start_time'],
+                end_time=data['end_time'],
                 end_date=data['end_date'],
                 date=date  
             )
+            # print(gym_class)
             gym_class.save()
-        return
+            print("hello_1")
+        return gym_class
+    
+    def default(self):
+        return json.dumps(self.__dict__)
+    
+    # def create(self, data):
+    #     gym_class = Class.objects.create(
+    #     studio = data['studio'],
+    #     name=data['name'],
+    #     description=data['description'],
+    #     keywords=data['keywords'],
+    #     capacity=data['capacity'],
+    #     frequency=data['frequency'], 
+    #     weekday=data['weekday'], 
+    #     start_date=data['start_date'],
+    #     end_date=data['end_date'],
+    #     date=date  
+    #     )
+    #     gym_class.save()
+    #     return gym_class
 
 class UserAndClassSerializer(serializers.ModelSerializer):
-    classes = ClassSerializer()
-    users = UserSerializer()
+    # classes = ClassSerializer()
+    # users = UserSerializer()
 
     class Meta:
         model = UserAndClass
-        fields = ['class', 'users']
+        fields = ['user', 'gym_class']
+
+    def create(self, data):
+        userandclass = UserAndClass.objects.create(
+            user=data['user'],
+            gym_class=data['gym_class'],
+        )
+        userandclass.save()
+
+        return userandclass

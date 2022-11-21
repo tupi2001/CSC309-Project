@@ -94,7 +94,6 @@ class RegisterSerializer(serializers.ModelSerializer):
             username=data['username'],
             email=data['email']
         )
-
         user.set_password(data['password'])
         user.save()
 

@@ -10,8 +10,9 @@ from dateutil.rrule import *
 from dateutil.parser import *
 import datetime
 from datetime import date
+import json
 
-class Class(models.Model):
+class GymClass(models.Model):
     studio = models.ForeignKey(to=Studio, on_delete=CASCADE, 
         default=1, null=False)
     name = models.CharField(max_length=15, null=False)
@@ -19,19 +20,43 @@ class Class(models.Model):
     coach = models.CharField(max_length=15, null=False)
     keywords = models.CharField(max_length=200, null=False)  # how to create a list
     capacity = models.PositiveIntegerField(null=False)
+    current_capacity = models.PositiveIntegerField(default=0)
     # recurrences = RecurrenceField(null=True)
-    frequency = models.CharField(max_length=15, null=True)
     weekday = models.CharField(max_length=2, null=True)
-    start_date = models.CharField(max_length=9, null=True)
-    end_date = models.CharField(max_length=9, null=True)
+    frequency = models.CharField(max_length=15, null=True)
+    start_date = models.CharField(max_length=10, null=True)
+    end_date = models.CharField(max_length=10, null=True)
     start_time = models.TimeField(null=False)
     end_time = models.TimeField(null=False)
-    date = models.DateTimeField(default=date.today())
+    date = models.DateTimeField(null=True)
     # end_date = models.DateField(null=False)
     # users = models.ManyToManyField(CustomUser, default=1)
 
     def __str__(self):
-        return self.name
+        return f'[{self.name}, {self.studio}, {self.id}]'
+
+    def save(self, *args, **kwargs):
+        super(GymClass, self).save(*args, **kwargs)
+
+    def default(self):
+        return json.dumps(self.__dict__)
+
+    def serialize(self):
+        json = {}
+        json["studio"] = self.studio
+        json["name"] = self.name
+        json["description"] = self.description
+        json["coach"] = self.coach
+        json["keywords"] = self.keywords
+        json["capacity"] = self.capacity
+        json["frequency"] = self.frequency
+        json["weekday"] = self.weekday
+        json["start_date"] = self.start_date
+        json["end_date"] = self.end_date
+        json["start_time"] = self.start_time
+        json["end_time"] = self.end_time
+        json["date"] = self.date
+        return json
 
     def frequency(self):
         if self.frequency not in {YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY}:
@@ -60,9 +85,9 @@ class Class(models.Model):
         return dates
 
 
-        
-
-
 class UserAndClass(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=CASCADE, default=1)
-    gym_class = models.ForeignKey(Class, on_delete=CASCADE, default=1)
+    gym_class = models.ForeignKey(GymClass, on_delete=CASCADE, default=1)
+
+    def __str__(self):
+        return f'[{self.user}, {self.gym_class}]'

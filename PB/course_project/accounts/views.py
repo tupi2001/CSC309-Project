@@ -20,7 +20,8 @@ from classes.models import UserAndClass
 
 # Create your views here.
 class UpdateProfile(generics.UpdateAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
     def get_object(self):
@@ -39,8 +40,7 @@ class RegisterView(generics.CreateAPIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             token, created = Token.objects.get_or_create(user=user)
-
-        return Response({'status': status.HTTP_200_OK, 'Token': token.key})
+        return Response({'status': status.HTTP_200_OK, 'Token': token.key, 'id': user.id})
 
 
 class LoginView(GenericAPIView):
@@ -57,7 +57,8 @@ class LoginView(GenericAPIView):
 
 
 class LogoutView(GenericAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request):
         print(request)
@@ -67,14 +68,32 @@ class LogoutView(GenericAPIView):
 
 
 class ClassesView(ListAPIView):
-    permission_classes = [IsAuthenticated]
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get_queryset(self):
         response = {}
-        classes = UserAndClass.objects.filter(users=self)
-        for gym_class in classes:
-            class_info = gym_class.__dict__
-            # class_info.pop('users')
-            response[class_info['name']] = class_info.pop('name')
+        classes = UserAndClass.objects.filter(users=self.request.user)
+        # for gym_class in classes:
+        #     class_info = gym_class.__dict__
+        #     # class_info.pop('users')
+        #     response[class_info['name']] = class_info.pop('name')
 
-        return JsonResponse(response)
+        # for gym_class in classes:
+        #     class_info = gym_class.__dict__
+        #     # print(gy)
+        #     # response[gym_class.name] = [ {gym_class.studio.__dict__}, gym_class.id]
+        #     response.append(list())
+
+        classes = []
+
+        for gym_class in classes:
+            dict = {
+                'name':gym_class.name,
+                'id': gym_class.id
+            }
+            classes.append(dict)
+
+        data = {'gym_class': classes}
+
+        return Response(data)
