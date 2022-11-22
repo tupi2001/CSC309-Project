@@ -1,15 +1,11 @@
 from django.shortcuts import render
-import jwt
+import json
 from django.shortcuts import get_object_or_404
 from django.http import JsonResponse
 from rest_framework import generics, permissions, status
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.models import Token
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.generics import GenericAPIView, RetrieveAPIView, UpdateAPIView
-from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
-from rest_framework.views import APIView
+from dateutil.relativedelta import relativedelta
 
 from .models import Subscriptions, Card, Payment, UserSub
 from .serializers import SubscriptionSerializer, CardSerializer, UserSubSerializer, PaymentSerializer
@@ -17,58 +13,81 @@ from .serializers import SubscriptionSerializer, CardSerializer, UserSubSerializ
 # Create your views here.
 
 class AddCard(generics.CreateAPIView):
+    """Create a card view to allow creation of a new card instance"""
     permission_classes = [IsAuthenticated]
     serializer_class = CardSerializer
 
     def post(self, request, *args, **kwargs):
+        """Post method to send data of a specific card"""
+        card = self.get_object()
+
         serializer = CardSerializer(data=request.data, context={'request': request})
 
-        if serializer.is_valid(raise_exception=True):
-            user = serializer.save()
-        
+        # checks to see if logged in user matches user the card is being registered to
+        if self.request.user.id == card.user_id:
+            if serializer.is_valid():
+                serializer.save()
+        else:
+            return Response({'error': 'Unauthenticated'})
+
         return Response({'status': status.HTTP_200_OK})
 
 class UpdateCard(generics.UpdateAPIView):
+    """Allows user to update their card information"""
     queryset = Card.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = CardSerializer
 
-    def patch(self, request, *args, **kwargs):
-        card_object = self.get_object()
-        # data = request.data
+    def get_queryset(self, pk):
+        """Override to seek users by user_id"""
+        return self.get_serializer().Meta.model.objects.get(user_id = pk)
+    
+    def put(self, request, pk = None, *args, **kwargs):
+        """Put method to allow users to update their card information"""
 
-        serializer = self.get_serializer(card_object, data=request.data, partial=True)
+        # check and see if card exists
+        if self.get_queryset(pk):
+            card = self.get_queryset(pk)
+            
+            serializer = CardSerializer(self.get_queryset(pk), data=request.data)
+            
+            # check if user is authenticated
+            if self.request.user.id == card.user_id:
+                if serializer.is_valid():
+                    serializer.save()
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response({"message": "Updated successfully"})
-
-        else:
-            return Response({"message": "failed", "details": serializer.errors})
-
-        if card_object.user == self.request.user:
-            card_object.name = data.get('name', card_object.name)
-            card_object.card = data.get('card', card_object.card)
-
-            card_object.save()
-            serializer = CardSerializer(card_object)
-            return Response(serializer.data)
-
-        return Response({'error': 'Unauthenticated'})
+                # change user card to match this one, if user already has subscription
+                if UserSub.objects.filter(user_id = self.request.user.id).exists():
+                    user_sub = UserSub.objects.get(user_id = self.request.user.id)
+                    user_sub.card = self.get_object()
+                    user_sub.save()
+                        
+                return Response(serializer.data, status= status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Unauthenticated'})
+        
+        return Response({'error': "Card does not exist."}, status= status.HTTP_400_BAD_REQUEST)
 
 class AddSubscription(generics.CreateAPIView):
+    """Create a User-Subscription pairing"""
     permission_classes = [IsAuthenticated]
     serializer_class = UserSubSerializer
 
     def post(self, request, *args, **kwargs):
-        data = request.data
+        """Post method to send data for User-Subscription pairing"""
+        usersub_object = self.get_object()
 
-        serializer = UserSubSerializer(data=data, context={'request': request})
+        serializer = UserSubSerializer(data=request.data, context={'request': request})
+
+        # checks to see if card being used is user's
+        if not usersub_object.card_id == self.request.user.id:
+            return Response({'error': "Cannot add card as it does not belong to current user"})
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
-            payment = PaymentSerializer(data=data)
+            # already 'charge' card
+            payment = PaymentSerializer(data=request.data)
 
             if payment.is_valid(raise_exception=True):
                 payment.save()
@@ -76,43 +95,74 @@ class AddSubscription(generics.CreateAPIView):
         return Response({'status': status.HTTP_200_OK})
 
 class UpdateSubscription(generics.UpdateAPIView):
+    """Allows user to update their subscription"""
     permission_classes = [IsAuthenticated]
     serializer_class = UserSubSerializer
+    queryset = UserSub.objects.all()
 
-    def patch(self, request, *args, **kwargs):
-        sub_object = self.get_object()
-        data = request.data
+    def get_queryset(self, pk):
+        """Override to seek users by user_id"""
+        return self.get_serializer().Meta.model.objects.get(user_id = pk)
+    
+    def put(self, request, pk = None, *args, **kwargs):
+        """Put method to allow users to update their subscription"""
 
-        if sub_object.user == self.request.user:
-            sub_object.name = data.get('subscription', sub_object.subscription)
-            sub_object.card = data.get('card_information', sub_object.card_information)
-            sub_object.renew = data.get('renew', sub_object.renew)
+        # check and see if usersub exists
+        if self.get_queryset(pk):
+            usersub_object = self.get_object()
+            
+            serializer = UserSubSerializer(self.get_queryset(pk), data=request.data)
 
-            sub_object.save()
-            serializer = UserSubSerializer(sub_object)
-            return Response(serializer.data)
+             # check if user is authenticated
+            if self.request.user.id == usersub_object.user_id:
+                
+                # checks to see if card being used is user's
+                if not usersub_object.card_id == self.request.user.id:
+                    return Response({'error': "Cannot add card as it does not belong to current user"})
+                
+                # if everything is alright, save and return 200 response
+                if serializer.is_valid():
+                    serializer.save()
+                    return Response(serializer.data, status= status.HTTP_200_OK)
+            else:
+                return Response({'error': 'Unauthenticated'})
+        
+        return Response({'error': "UserSub does not exist."}, status= status.HTTP_400_BAD_REQUEST)
 
-        return Response({'error': 'Unauthenticated'})
 
-class PaymentHistory(generics.ListAPIView):
-    queryset = Payment.objects.all()
+class PaymentHistory(generics.GenericAPIView):
+    """View for payment history of logged in user"""
     serializer_class = PaymentSerializer
     permission_classes =  [IsAuthenticated]
-    search_fields = ('user')
-    paginate_by = 20
 
-    def get_queryset(self):
+    def get(self, *args, **kwargs):
+        """Get method for payment history for logged in user"""
+
+        # checks to see if user has payments made
         if not Payment.objects.filter(user=self.request.user).exists():
             return Response('NOT FOUND', status=404)
 
         payments = Payment.objects.filter(user = self.request.user)
 
-        payments_dict = {}
+        payments_json = []
 
-        i = 1
-
+        # append list with previous payments made in JSON format
         for payment in payments:
-            object = payments.get(id=i)
-            payments_dict[object.date] = [object.user, object.card, object.subscription]
+            dict = {'user': payment.user.__str__(), 'date': payment.date, 'card': payment.card.__str__(), 'sub': payment.subscription.__str__()}
+            payments_json.append(dict)
 
-        return payments
+        # section checks to see if user will renew subscription, if so add future upcoming payment
+
+        user = UserSub.objects.get(user=self.request.user)
+
+        if user.DoesNotExist:
+            if user.renew:
+                if user.subscription.charge_every == 'Month':
+                    next_payment = {'user': user.user.__str__(), 'date': user.renew_date + relativedelta(months=+1), 'card': user.card.__str__(), 'sub': user.subscription.__str__()}
+                else:
+                    next_payment = {'user': user.user.__str__(), 'date': user.renew_date + relativedelta(years=+1), 'card': user.card.__str__(), 'sub': user.subscription.__str__()}
+                payments_json.append(next_payment)
+
+        data = {'payments': payments_json}
+
+        return JsonResponse(data)
