@@ -20,8 +20,8 @@ from classes.models import UserAndClass
 
 # Create your views here.
 class UpdateProfile(generics.UpdateAPIView):
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
     serializer_class = UserSerializer
 
     def get_object(self):
@@ -57,8 +57,8 @@ class LoginView(GenericAPIView):
 
 
 class LogoutView(GenericAPIView):
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
 
     def get(self, request):
         print(request)
@@ -68,8 +68,8 @@ class LogoutView(GenericAPIView):
 
 
 class ClassesView(ListAPIView):
-    # permission_classes = [IsAuthenticated]
-    permission_classes = [AllowAny]
+    permission_classes = [IsAuthenticated]
+    # permission_classes = [AllowAny]
 
     def get_queryset(self):
         response = {}

@@ -23,7 +23,7 @@ class GymClass(models.Model):
     current_capacity = models.PositiveIntegerField(default=0)
     # recurrences = RecurrenceField(null=True)
     weekday = models.CharField(max_length=2, null=True)
-    frequency = models.CharField(max_length=15, null=True)
+    frequency2 = models.CharField(max_length=15, null=True)
     start_date = models.CharField(max_length=10, null=True)
     end_date = models.CharField(max_length=10, null=True)
     start_time = models.TimeField(null=False)
@@ -33,7 +33,7 @@ class GymClass(models.Model):
     # users = models.ManyToManyField(CustomUser, default=1)
 
     def __str__(self):
-        return f'[{self.name}, {self.studio}, {self.id}]'
+        return f'[{self.name}, {self.studio}, {self.id}, {self.date}]'
 
     def save(self, *args, **kwargs):
         super(GymClass, self).save(*args, **kwargs)
@@ -58,31 +58,13 @@ class GymClass(models.Model):
         json["date"] = self.date
         return json
 
-    def frequency(self):
-        if self.frequency not in {YEARLY, MONTHLY, WEEKLY, DAILY, HOURLY}:
-            raise ValueError('Please enter a valid frequency')
-        if self.weekday not in {MO, TU, WE, TH, FR, SA, SU}:
-            raise ValueError('Please enter a valid weekday')
+    def decrease_capacity(self):
+        self.current_capacity += 1
+        return self.current_capacity
 
-        start = self.start_date
-        date_format = '%m/%d/%Y'
-        try:
-            datetime.datetime.strptime(start, date_format)
-        except ValueError:
-            raise ValueError('Please enter a valid date')
-        start_date = datetime.strptime(start, '%m/%d/%y')
-
-        end = self.end_date
-        date_format = '%Y/%m/%d'
-        try:
-            datetime.datetime.strptime(end, date_format)
-        except ValueError:
-            raise ValueError('Please enter a valid date')
-        end_date = datetime.strptime(end, '%m/%d/%y')
-        count = relativedelta(start_date, end_date).weeks
-
-        dates = list(rrule(self.frequency, count=count, byweekday=self.weekday, dtstart=start_date))
-        return dates
+    def increase_capacity(self):
+        self.current_capacity -= 1
+        return self.current_capacity
 
 
 class UserAndClass(models.Model):

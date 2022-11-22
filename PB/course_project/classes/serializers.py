@@ -13,13 +13,13 @@ import json
 
 
 class ClassSerializer(serializers.ModelSerializer):
-    frequency = serializers.CharField()
+    frequency2 = serializers.CharField()
     # print("hello22")
     # weekday = serializers.CharField()
     class Meta:
         model = GymClass
         fields = ['studio', 'name', 'description', 'coach', 
-            'keywords', 'capacity', 'frequency', 'weekday', 'start_date', 
+            'keywords', 'capacity', 'frequency2', 'weekday', 'start_date', 
             'end_date', 'start_time', 'end_time']
 
     def frequency_validate(self, data):
@@ -41,7 +41,7 @@ class ClassSerializer(serializers.ModelSerializer):
         print("create")
         print("hello2")
         start = data['start_date']
-        frequency = data['frequency']
+        frequency = data['frequency2']
 
         if frequency == 'YEARLY':
             freq = YEARLY
@@ -76,7 +76,8 @@ class ClassSerializer(serializers.ModelSerializer):
         except ValueError:
             raise ValueError('Please enter a valid date')
         start_date = datetime.strptime(start, '%m/%d/%Y')
-
+        print(start)
+        print(start_date)
         end = data['end_date']
         try:
             datetime.strptime(end, date_format)
@@ -86,10 +87,11 @@ class ClassSerializer(serializers.ModelSerializer):
         count = abs(relativedelta(start_date, end_date).weeks) + 1  # number of recurring classes there should be
 
         dates = list(rrule(freq=freq, count=count, byweekday=wday, dtstart=start_date))
-
+        print(dates)
+        created_classes = []
         for date in dates:
             gym_class = GymClass.objects.create(
-                studio = data['studio'],
+                studio=data['studio'],
                 name=data['name'],
                 description=data['description'],
                 keywords=data['keywords'],
@@ -104,7 +106,12 @@ class ClassSerializer(serializers.ModelSerializer):
             )
             # print(gym_class)
             gym_class.save()
-            print("hello_1")
+            # print("hello_1")
+            entry = {'name': gym_class.name, 'studio': gym_class.studio, 'id': gym_class.id, 
+                'start_date': date}
+            created_classes.append(entry)
+            
+        print(created_classes)
         return gym_class
     
     def default(self):
