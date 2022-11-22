@@ -19,16 +19,11 @@ class AddCard(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Post method to send data of a specific card"""
-        card = self.get_object()
 
         serializer = CardSerializer(data=request.data, context={'request': request})
 
-        # checks to see if logged in user matches user the card is being registered to
-        if self.request.user.id == card.user_id:
-            if serializer.is_valid():
-                serializer.save()
-        else:
-            return Response({'error': 'Unauthenticated'})
+        if serializer.is_valid():
+            serializer.save()
 
         return Response({'status': status.HTTP_200_OK})
 
@@ -47,14 +42,10 @@ class UpdateCard(generics.UpdateAPIView):
 
         # check and see if card exists
         if self.get_queryset(pk):
-            card = self.get_queryset(pk)
-            
             serializer = CardSerializer(self.get_queryset(pk), data=request.data)
             
-            # check if user is authenticated
-            if self.request.user.id == card.user_id:
-                if serializer.is_valid():
-                    serializer.save()
+            if serializer.is_valid():
+                serializer.save()
 
                 # change user card to match this one, if user already has subscription
                 if UserSub.objects.filter(user_id = self.request.user.id).exists():
@@ -63,8 +54,6 @@ class UpdateCard(generics.UpdateAPIView):
                     user_sub.save()
                         
                 return Response(serializer.data, status= status.HTTP_200_OK)
-            else:
-                return Response({'error': 'Unauthenticated'})
         
         return Response({'error': "Card does not exist."}, status= status.HTTP_400_BAD_REQUEST)
 
@@ -75,13 +64,12 @@ class AddSubscription(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         """Post method to send data for User-Subscription pairing"""
-        usersub_object = self.get_object()
 
         serializer = UserSubSerializer(data=request.data, context={'request': request})
 
-        # checks to see if card being used is user's
-        if not usersub_object.card_id == self.request.user.id:
-            return Response({'error': "Cannot add card as it does not belong to current user"})
+        # checks to see if user has a card registered
+        if not Card.objects.filter(user_id = self.request.user.id).exists():
+            return Response({'error': "Cannot add subscription as user has no registered card"})
 
         if serializer.is_valid(raise_exception=True):
             serializer.save()
@@ -109,7 +97,7 @@ class UpdateSubscription(generics.UpdateAPIView):
 
         # check and see if usersub exists
         if self.get_queryset(pk):
-            usersub_object = self.get_object()
+            usersub_object = self.get_queryset(pk)
             
             serializer = UserSubSerializer(self.get_queryset(pk), data=request.data)
 
