@@ -121,3 +121,11 @@ class AllStudioInfoView(generics.ListAPIView):
             queryset = queryset.filter(amenities=amenities)
 
         return queryset
+
+@api_view(['GET'])
+def StudioInformation(request, id):
+    if request.method == 'GET':
+        studio = get_object_or_404(Studio, id=id)
+        studio = studio.__dict__
+        studio.pop('_state')
+        return JsonResponse(studio)
