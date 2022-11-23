@@ -1,0 +1,279 @@
+commit eff3c3cc04a61a788a78d618382d0902a5d9ab13
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Sun Nov 20 18:09:35 2022 -0500
+
+    Delete urls.cpython-310.pyc
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit 3ec0e085c62221b117f6577c5ac44014c3fc6c2a
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Sun Nov 20 18:09:21 2022 -0500
+
+    Delete settings.cpython-310.pyc
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit d251ff99ab41e60567fca3aaa15b32377fb57f38
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Sun Nov 20 18:08:35 2022 -0500
+
+    Delete models.cpython-310.pyc
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit 4d776d40309fc7b37b57923a03b5ae71d8bb5291
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sun Nov 20 18:05:54 2022 -0500
+
+    removing old code
+
+commit 46c592e64e8baf7dd99d4ce706115f51ce61fbee
+Merge: fecbc83 ef28912
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sun Nov 20 17:57:05 2022 -0500
+
+    Fixing merge conflict
+
+commit ef2891265d2a42a1af04b5e330313baa6b58754e
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Sun Nov 20 17:52:00 2022 -0500
+
+    Delete misc.xml
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit 27c935fb75cdc1e576557ea8b0409f9afb2009ad
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Sun Nov 20 17:51:31 2022 -0500
+
+    Delete models.cpython-310.pyc
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit fa105c7b25241a15df9cc3e52693a33b69c894da
+Merge: f07d369 47d8c5f
+Author: alissalozhkin <65978304+alissalozhkin@users.noreply.github.com>
+Date:   Sun Nov 20 17:21:30 2022 -0500
+
+    Merge pull request #9 from tupi2001/studios_branch
+    
+    Users can login, register and update their profile
+
+commit 47d8c5f6fc8942e9b672ee604da03213b4682ad9
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sun Nov 20 17:19:07 2022 -0500
+
+    Documented final code for users and studios
+
+commit 5d81347e5c0c0aaad99bbd5dbcd20ab558e3a030
+Merge: 69f85bc a1f3ca5
+Author: alissalozhkin <alissa.lozhkin@gmail.com>
+Date:   Sun Nov 20 16:27:50 2022 -0500
+
+    fully functional studios and users yayyy!
+
+commit a1f3ca56b5ebcecfa24876c4dd64f4de06b45be5
+Merge: 0744de9 cdf1fcf
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sun Nov 20 12:38:36 2022 -0500
+
+    merge conflict
+
+commit 0744de98f8d22cd13495cbd004757b484b8ff813
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sun Nov 20 12:35:21 2022 -0500
+
+    Overhauled studios to make it more compatible. Unable to test due to software malfunction. Need to add documentation
+
+commit 69f85bc69cbfaac9fd46bb2535f2a9c672fd98d2
+Author: alissalozhkin <alissa.lozhkin@gmail.com>
+Date:   Sun Nov 20 09:11:27 2022 -0500
+
+    new code for classes
+
+commit fecbc83e3fa223c6e652228cf6fc58f16b39015c
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sat Nov 19 18:43:36 2022 -0500
+
+    Committing to switch branches
+
+commit cdf1fcf33149246a92912402e998722a302ea364
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Sat Nov 19 18:41:38 2022 -0500
+
+    Update serializers.py
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit d8d8c9f439dab293b3ecfa9b8a61ae741121d488
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sat Nov 19 18:37:43 2022 -0500
+
+    Removing extra files
+
+commit 99bd048d3a3ec36723fdf4138599574c708fe34d
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sat Nov 19 18:27:53 2022 -0500
+
+    Merge conflicts fixed
+
+commit 901e0f256f92686c6a628323e263bdb182fe15cc
+Merge: 83b0837 3667bc4
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sat Nov 19 18:22:04 2022 -0500
+
+    Users can now log in, register and edit their profile. Overhauled code to use CreateViewAPI's and to return JSON string for UI implementation
+
+commit 83b08371cb06f66e63da17661b6f8ae70859c6cd
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Sat Nov 19 18:17:18 2022 -0500
+
+    Users can now log in, register and edit their profile. Overhauled code to use CreateViewAPI's and to return JSON string for UI implementation
+
+commit 3667bc477dfea8f6ada9cbc7127595264829d2de
+Author: Oliver Yukio Laranjeira <75751738+oliverlaranjeira@users.noreply.github.com>
+Date:   Sat Nov 19 01:44:20 2022 -0500
+
+    Delete forms.py
+    
+    deleted forms
+    
+    Signed-off-by: Oliver Yukio Laranjeira <75751738+oliverlaranjeira@users.noreply.github.com>
+
+commit cf956b1ba85bf9a42d039876deb4e5839d141135
+Author: oliverlaranjeira <oliver.laranjeira@mail.utoronto.ca>
+Date:   Sat Nov 19 01:43:15 2022 -0400
+
+    cleaning up
+
+commit 2c069a6aac755267bea58cd010e0128bba85310b
+Author: oliverlaranjeira <oliver.laranjeira@mail.utoronto.ca>
+Date:   Sat Nov 19 01:39:35 2022 -0400
+
+    commit
+
+commit e25339a5c93e7c5ae8da2175d31506cc652a162c
+Merge: b337370 50a7af8
+Author: oliverlaranjeira <oliver.laranjeira@mail.utoronto.ca>
+Date:   Sat Nov 19 01:37:49 2022 -0400
+
+    Merge branch 'studios_branch' of https://github.com/tupi2001/CSC309-Project into studios_branch
+
+commit b33737005e6927578ad2d19b3e5aa1d575dff65d
+Author: oliverlaranjeira <oliver.laranjeira@mail.utoronto.ca>
+Date:   Sat Nov 19 01:33:15 2022 -0400
+
+    updated
+
+commit 50a7af8f06d3a7344799114325fdbcff1fbb1e18
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Fri Nov 18 17:10:11 2022 -0500
+
+    User can now update their profile. Some bugs still need to be fixed
+
+commit f07d3694cc1562bcb8eb8dbcccff8f7e03e0f397
+Merge: 3353b13 bd35d17
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Thu Nov 17 10:17:24 2022 -0500
+
+    Merge pull request #7 from tupi2001/studios_branch
+    
+    Studios base code. Not yet tested
+
+commit bd35d17620394db4b8f5bcf9670fc974e5baaad3
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Wed Nov 16 23:55:56 2022 -0500
+
+    Tested User and functions properly
+
+commit 015757232c07516efe7dff0e6465399b051a3bc0
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Wed Nov 16 23:55:56 2022 -0500
+
+    Tested User and functions properly
+
+commit 643b483452f6448ff56560333f28ea9ecbf52447
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Tue Nov 15 23:10:44 2022 -0500
+
+    Studios base code. Not yet tested
+
+commit b0fa3a583bfe2576cfc999bb5fc287680b3ba31b
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Tue Nov 15 00:18:17 2022 -0500
+
+    Initial code for accounts. has not been tested yet
+
+commit 4d724ba4dbc9b8398d6fabfd438fede28d9ec3b6
+Author: oliverlaranjeira <oliver.laranjeira@mail.utoronto.ca>
+Date:   Thu Nov 17 00:31:37 2022 -0400
+
+    updated models and views
+
+commit 82d016778b05460336597a3a9f63080d267256f8
+Author: oliverlaranjeira <oliver.laranjeira@mail.utoronto.ca>
+Date:   Wed Nov 16 23:58:37 2022 -0400
+
+    subscriptions commit
+
+commit 6b385a95a0bc32f97418fbd98a009cea9aa9cabe
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Wed Nov 16 17:26:12 2022 -0500
+
+    Changes committed
+
+commit e0bd47df531acb1b54073d770228464c3ad3a139
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Tue Nov 15 23:10:44 2022 -0500
+
+    Studios base code. Not yet tested
+
+commit 3353b1367dd1057eee5a1d4ecc5365ffa504fec2
+Author: tupi2001 <nada.geldin@gmail.com>
+Date:   Tue Nov 15 00:18:17 2022 -0500
+
+    Initial code for accounts. has not been tested yet
+
+commit 27049422d55fd36c07224016f5c61b1ab21890a6
+Merge: dc20a31 64b5b27
+Author: alissalozhkin <65978304+alissalozhkin@users.noreply.github.com>
+Date:   Sun Nov 13 19:35:39 2022 -0500
+
+    Merge pull request #6 from tupi2001/Alissa
+    
+    Alissa
+
+commit 64b5b27ecfc14317b3de942e7492df63d826afc3
+Author: alissalozhkin <alissa.lozhkin@gmail.com>
+Date:   Sun Nov 13 19:34:41 2022 -0500
+
+    project made
+
+commit 22026d004aacc7ee54908efee9ac6067a6b855cd
+Author: alissalozhkin <alissa.lozhkin@gmail.com>
+Date:   Sun Nov 13 13:27:25 2022 -0500
+
+    from markus
+
+commit dc20a318642114bd81603184c5f20cf0be56541e
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Wed Nov 9 16:13:03 2022 -0500
+
+    Delete Backend
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit 1112a294f33c936c09da86ffb23cf828c232d506
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Wed Nov 9 16:11:21 2022 -0500
+
+    Create Backend
+    
+    Signed-off-by: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+
+commit 27080abdbee4453d6f264b883eafe84d4762e43a
+Author: tupi2001 <74106484+tupi2001@users.noreply.github.com>
+Date:   Wed Nov 9 16:09:31 2022 -0500
+
+    Initial commit
