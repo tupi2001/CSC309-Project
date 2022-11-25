@@ -12,28 +12,28 @@ from rest_framework import generics, permissions, status
 from studios.models import Studio
 from accounts.models import CustomUser
 from django.db.models import Q
-from datetime import datetime
+from datetime import datetime, timedelta
 
 class CreateClassView(CreateAPIView):
-    permission_classes = [IsAdminUser]
-    # permission_classes = [AllowAny]
+    """Creates a class for a studio"""
+    # permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
 
     queryset = GymClass.objects.all()
     serializer_class = ClassSerializer
 
     def post(self, request):
-        print("hello")
+        """Creates a class from user input"""
         serializer = ClassSerializer(data=request.data, context={'request': request})
         if serializer.is_valid(raise_exception=True):
             gym_class = serializer.save()
-            print(gym_class)
-        # print(hello)
         return Response({'status': status.HTTP_200_OK, 'class_id': gym_class.id})
 
 
 class UpdateClassView(UpdateAPIView):
-    permission_classes = [IsAdminUser]
-    # permission_classes = [AllowAny]
+    """Updates a class in a particular studio"""
+    # permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = GymClass.objects.all()
     serializer_class = ClassSerializer
     lookup_field = 'id'
@@ -45,18 +45,20 @@ class UpdateClassView(UpdateAPIView):
     #         serializer.save()
 
     #     return Response(serializer.data)
-    def post(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs): # change this
         return get_object_or_404(GymClass, pk=self.kwargs['class_id'])
 
 
 class DeleteClassView(DestroyAPIView):
-    permission_classes = [IsAdminUser]
-    # permission_classes = [AllowAny]
+    """Deletes a class that belongs to a specific studio"""
+    # permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
     queryset = GymClass.objects.all()
     serializer_class = ClassSerializer
     lookup_field = 'id'
 
     def get(self, request, *args, **kwargs):
+        """Gets studio id and class id to delete the proper class"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
         instance = get_object_or_404(GymClass, pk=self.kwargs['class_id'], studio=studio)
         instance.delete()
@@ -64,12 +66,14 @@ class DeleteClassView(DestroyAPIView):
 
 
 class DeleteClassesView(DestroyAPIView):
-    permission_classes = [IsAdminUser]
-    # permission_classes = [AllowAny]
+    """Deletes classes of a certain type that belongs to a specific studio"""
+    # permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
     serializer_class = ClassSerializer
     lookup_field = 'id'
 
     def get(self, request, *args, **kwargs):
+        """Gets studio id and class id to delete the proper classes"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
         gym_class = get_object_or_404(GymClass, pk=self.kwargs['class_id'], studio=studio)
         queryset = GymClass.objects.filter(name=gym_class.name, studio=gym_class.studio)
@@ -79,33 +83,29 @@ class DeleteClassesView(DestroyAPIView):
         return Response({'status': 'classes were deleted successfully'})
 
 
-# class ClassView(RetrieveAPIView):
-#     serializer_class = ClassSerializer
-
-#     def get_object(self):
-#         return get_object_or_404(Class, id=self.kwargs['product_id'])
-
-
 class ClassesView(ListAPIView):
-    permission_classes = [IsAdminUser]
-    # permission_classes = [AllowAny]
+    """List the classes that belong to a certain studio"""
+    # permission_classes = [IsAdminUser]
+    permission_classes = [AllowAny]
     serializer_class = ClassSerializer
 
     def get(self, request, *args, **kwargs):
+        """Gets studio id to list all classes that belong to that studio"""
         today = now().time()
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
+        print(studio.name)
         set = GymClass.objects.filter(studio=self.kwargs['studio_id'])
+        # print(set)
+        # for gym_class in set:
+        #     print(type(gym_class.date) == datetime)
+        #     gym_class.date = datetime.strptime(gym_class.date, '%Y-%m-%d')
+            # except:
+            #     gym_class.date = datetime.strptime(gym_class.date, '%m/%d/%Y')
         print(set)
         # str_date = gym_class.date.now.strftime("%m/%d/%Y
         # set2 = set.filter(date__gte = datetime.now()).order_by('start_time')
-        set2 = set.filter(date__gte = datetime.now()).order_by('date')
-        print(set2)
-        # response = []
-        # for gym_class in set2:
-        #     class_info = gym_class.__dict__
-        #     # print(gy)
-        #     # response[gym_class.name] = [ {gym_class.studio.__dict__}, gym_class.id]
-        #     response.append(list())
+        # start_date = datetime.datetime.strptime(date, '%m/%d/%Y')
+        set2 = set.filter(date__gte = datetime.now()-timedelta(days=1)).order_by('date')
 
         classes = []
 
@@ -124,13 +124,15 @@ class ClassesView(ListAPIView):
 
 
 class EnrolUserInClassView(CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
+    """Enrol user in a class in one studio"""
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     queryset = UserAndClass.objects.all()
     serializer_class = UserAndClassSerializer
 
     def get(self, request, *args, **kwargs):
+        """Get studio id and class id to enrol user in specific class"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
         gym_class = get_object_or_404(GymClass, pk=self.kwargs['class_id'], studio=studio)
         user = get_object_or_404(CustomUser, pk=self.request.user.id)
@@ -153,17 +155,20 @@ class EnrolUserInClassView(CreateAPIView):
 
 
 class EnrolUserInClassesView(CreateAPIView):
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
+    """Enrol user in a class in a specific studio"""
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     queryset = UserAndClass.objects.all()
     serializer_class = UserAndClassSerializer
 
     def get(self, request, *args, **kwargs):
+        """Get studio id and class id to enrol user in a specific type of class"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
         gym_class = get_object_or_404(GymClass, pk=self.kwargs['class_id'], studio=studio)
         user = get_object_or_404(CustomUser, pk=self.request.user.id)
-        all_gym_classes = GymClass.objects.filter(studio=gym_class.studio, name=gym_class.name)
+        all_gym_classes = GymClass.objects.filter(studio=gym_class.studio, name=gym_class.name, 
+                start_time=gym_class.start_time)
         # serializer = UserAndClassSerializer(data=request.data, context={'request': request})
         for gym_class in all_gym_classes:
             capacity = True
@@ -187,13 +192,15 @@ class EnrolUserInClassesView(CreateAPIView):
 
 
 class RemoveUserFromClassView(DestroyAPIView):
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
+    """Remove user from a class in a specific studio"""
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     queryset = UserAndClass.objects.all()
     serializer_class = UserAndClassSerializer
     lookup_field = 'id'
 
     def get(self, request, *args, **kwargs):
+        """Get studio id and class id to remove user from specific class"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
         gym_class = get_object_or_404(GymClass, pk=self.kwargs['class_id'], studio=studio)
         instance = get_object_or_404(UserAndClass, gym_class=self.kwargs['class_id'], 
@@ -208,15 +215,17 @@ class RemoveUserFromClassView(DestroyAPIView):
 
 
 class RemoveUserFromClassesView(DestroyAPIView):
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
+    """Remove user from a type of class in a specific studio"""
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
     serializer_class = UserAndClassSerializer
     # lookup_field = 'id'
 
     def get(self, request, name=None, studio=None):
+        """Get studio id and class id to remove user from a specific type of class"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
         queryset = UserAndClass.objects.filter(name=name, studio=studio, 
-                user=self.request.user.id)  # change
+                user=self.request.user.id, start_time=gym_class.start_time)  # change
         # queryset2 = queryset.filter()
         for gym_class in queryset:
             gym_class.gym_class.decrease_capacity()
@@ -226,24 +235,14 @@ class RemoveUserFromClassesView(DestroyAPIView):
 
 
 class UserClassesView(ListAPIView):
-    permission_classes = [IsAuthenticated]
-    # permission_classes = [AllowAny]
+    """List user's class schedule"""
+    # permission_classes = [IsAuthenticated]
+    permission_classes = [AllowAny]
 
     def get(self, request, *args, **kwargs):
+        """Get user id to list all classes that the user is enrolled in"""
         response = {}
         gym_classes = UserAndClass.objects.filter(user=self.request.user.id)
-        # gym_class = GymClass.objects.filter(name=gym_classes.gym_class.name)
-        # print(self.request.user)
-        # for gym_class in classes:
-        #     class_info = gym_class.__dict__
-        #     # class_info.pop('users')
-        #     response[class_info['name']] = class_info.pop('name')
-
-        # for gym_class in classes:
-        #     class_info = gym_class.__dict__
-        #     # print(gy)
-        #     # response[gym_class.name] = [ {gym_class.studio.__dict__}, gym_class.id]
-        #     response.append(list())
 
         classes = []
 

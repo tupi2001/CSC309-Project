@@ -1,9 +1,7 @@
 from django.contrib import admin
-from subscriptions.models import Subscriptions, UserSub, Card, Payment
+from subscriptions.models import UserSub, Subscriptions, Card
 
-# Register your models here.
-
+# admin can create a new studio, add amenities or images
+admin.site.register(Card)
 admin.site.register(Subscriptions)
 admin.site.register(UserSub)
-admin.site.register(Card)
-admin.site.register(Payment)

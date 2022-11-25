@@ -122,6 +122,52 @@ class AllStudioInfoView(generics.ListAPIView):
 
         return queryset
 
+        lat = decimal.Decimal(float(request.POST.get('latitude')))
+        lon = decimal.Decimal(float(request.POST.get('longitude')))
+
+        # creating json string
+        distance = []
+        user_location = (lat, lon)
+        # for every studio use the latitude and longitude to find the location using haversine
+        # formula
+        for studio in Studio.objects.all():
+            studio_location = (studio.latitude, studio.longitude)
+            calculated_distance = hs.haversine(user_location, studio_location)
+            distance.append(calculated_distance)
+
+        # sort the studios by which is closest and which is furthest
+        sorted_studios = [x for _, x in sorted(zip(distance, Studio.objects.all()))]
+        studio_ordered = []
+
+        # create a json string using the name of the studios and the ordered list
+        for i in range(len(sorted_studios)):
+            dict = {
+                'name': sorted_studios[i].name,
+                'distance': distance[i]
+            }
+            studio_ordered.append(dict)
+        # return the the studio with values of name and distance
+        data = {'studio': studio_ordered}
+        return Response(data)
+
+class AllStudioInfoView(generics.ListAPIView):
+    """Tentative Search function"""
+    serializer_class =  StudioSerializer
+    permission_classes = [AllowAny,]
+
+    def get_queryset(self):
+        """Returns a specific gym a user looks for by name or amenities"""
+        queryset = Studio.objects.all()
+        name = self.request.query_params.get('name')
+        amenities = self.request.query_params.get('amenities')
+
+        if name:
+            queryset = queryset.filter(name=name)
+        if amenities:
+            queryset = queryset.filter(amenities=amenities)
+
+        return queryset
+
 
 
 # @api_view(['POST'])
