@@ -210,7 +210,7 @@ class RemoveUserFromClassView(DestroyAPIView):
         # get_object_or_404(UserAndClass, gym_class=self.kwargs['class_id'], 
         #         user=self.request.user)
         gym_class.decrease_capacity()
-        gym_class.save()
+        # gym_class.save()
         return Response({'status': 'successfully enrolled in classes'}) 
 
 
@@ -221,15 +221,22 @@ class RemoveUserFromClassesView(DestroyAPIView):
     serializer_class = UserAndClassSerializer
     # lookup_field = 'id'
 
-    def get(self, request, name=None, studio=None):
+    def get(self, request, *args, **kwargs):
         """Get studio id and class id to remove user from a specific type of class"""
         studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
-        queryset = UserAndClass.objects.filter(name=name, studio=studio, 
-                user=self.request.user.id, start_time=gym_class.start_time)  # change
-        # queryset2 = queryset.filter()
-        for gym_class in queryset:
-            gym_class.gym_class.decrease_capacity()
-            gym_class.delete()
+        gym_class = get_object_or_404(GymClass, pk=self.kwargs['class_id'], studio=studio)
+        queryset = GymClass.objects.filter(name=gym_class.name, studio=studio, 
+                start_time=gym_class.start_time)  # change
+        for instance in queryset:
+            object = get_object_or_404(UserAndClass, gym_class=instance.id, user=self.request.user)
+            object.gym_class.decrease_capacity()
+            instance.delete()
+        # queryset = UserAndClass.objects.filter(gym_class=gym_class, studio=studio, 
+        #         user=self.request.user.id)  # change
+        # # queryset2 = queryset.filter()
+        # for instance in queryset:
+        #     instance.gym_class.decrease_capacity()
+        #     instance.delete()
 
         return Response({'status': 'successfully unenrolled in classes'}) 
 
