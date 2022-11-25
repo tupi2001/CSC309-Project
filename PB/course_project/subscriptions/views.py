@@ -24,8 +24,9 @@ class AddCard(generics.CreateAPIView):
 
         if serializer.is_valid():
             serializer.save()
+            return Response({'status': status.HTTP_200_OK})
 
-        return Response({'status': status.HTTP_200_OK})
+        return Response({'error': "Card not valid."}, status= status.HTTP_400_BAD_REQUEST)
 
 class UpdateCard(generics.UpdateAPIView):
     """Allows user to update their card information"""
@@ -35,7 +36,7 @@ class UpdateCard(generics.UpdateAPIView):
 
     def get_queryset(self, pk):
         """Override to seek users by user_id"""
-        return self.get_serializer().Meta.model.objects.get(user_id = pk)
+        return self.get_serializer().Meta.model.objects.filter(user_id = pk).first()
     
     def put(self, request, pk = None, *args, **kwargs):
         """Put method to allow users to update their card information"""
@@ -71,6 +72,14 @@ class AddSubscription(generics.CreateAPIView):
         if not Card.objects.filter(user_id = self.request.user.id).exists():
             return Response({'error': "Cannot add subscription as user has no registered card"})
 
+        # check to see if card is user's
+        card_id = request.data.get('card', '')
+
+        card = Card.objects.get(id = card_id)
+
+        if card.user_id != self.request.user.id:
+            return Response({'error': "Cannot add subscription as card is not user's."})
+
         if serializer.is_valid(raise_exception=True):
             serializer.save()
 
@@ -90,7 +99,7 @@ class UpdateSubscription(generics.UpdateAPIView):
 
     def get_queryset(self, pk):
         """Override to seek users by user_id"""
-        return self.get_serializer().Meta.model.objects.get(user_id = pk)
+        return self.get_serializer().Meta.model.objects.filter(user_id = pk).first()
     
     def put(self, request, pk = None, *args, **kwargs):
         """Put method to allow users to update their subscription"""
@@ -104,9 +113,17 @@ class UpdateSubscription(generics.UpdateAPIView):
              # check if user is authenticated
             if self.request.user.id == usersub_object.user_id:
                 
-                # checks to see if card being used is user's
-                if not usersub_object.card_id == self.request.user.id:
-                    return Response({'error': "Cannot add card as it does not belong to current user"})
+                # checks to see if user has a card registered
+                if not Card.objects.filter(user_id = self.request.user.id).exists():
+                    return Response({'error': "Cannot add subscription as user has no registered card"})
+
+                # check to see if card is user's
+                card_id = request.data.get('card', '')
+
+                card = Card.objects.get(id = card_id)
+
+                if card.user_id != self.request.user.id:
+                    return Response({'error': "Cannot add subscription as card is not user's."})
                 
                 # if everything is alright, save and return 200 response
                 if serializer.is_valid():
