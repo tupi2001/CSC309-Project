@@ -115,7 +115,7 @@ class GymClass(models.Model):
         end_date = datetime.datetime.strptime(end, '%Y-%m-%d')
         count = abs(relativedelta(date_created, end_date).weeks) + 1  # number of recurring classes there should be
 
-        dates = list(rrule(freq=freq2, count=count, byweekday=wday, dtstart=date_created))
+        dates = list(rrule(freq=freq2, byweekday=wday, dtstart=date_created, until=end_date))
         print(dates)
         created_classes = []
         id_start = gym_class.id + 1
