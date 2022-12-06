@@ -15,6 +15,7 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import include, path
+from core.views import front
 
 # user can access classes, accounts, studios and subscriptions using specific urls
 
@@ -25,4 +26,5 @@ urlpatterns = [
     path('studios/', include('studios.urls', namespace='studios')),
     path('subscriptions/', include('subscriptions.urls', namespace='subscriptions')),
     path("api-auth/", include("rest_framework.urls")),
+    path("", front, name="front"),
 ]
