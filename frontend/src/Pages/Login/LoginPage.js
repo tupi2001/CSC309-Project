@@ -24,9 +24,6 @@ const LoginPage = () => {
           Don't have an account?
         </Link>
         <button className={styles["form-btn"]}>Sign in</button>
-        <p className={styles["copyright-tag"]}>
-          Copyright MKA Group &copy; 2022
-        </p>
       </div>
     </form>
   );

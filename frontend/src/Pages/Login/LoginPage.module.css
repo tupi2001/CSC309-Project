@@ -58,12 +58,6 @@
     background-color: #0d53fd;
 }
 
-.copyright-tag {
-    color: rgba(0, 0, 0, 0.4);
-    font-size: 1rem;
-    font-weight: 500;
-}
-
 .form-redirect {
     text-decoration: underline;
     color: #2f2f2f;
