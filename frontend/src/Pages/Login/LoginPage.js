@@ -13,7 +13,6 @@ const LoginPage = () => {
         <input
           type="email"
           placeholder="Email address"
-          autoFocus
           className={styles["form-input"]}
         ></input>
         <input
