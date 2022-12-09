@@ -82,7 +82,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         if not phone_regex.match(phone_number):
             raise serializers.ValidationError('Phone number invalid')
 
-    #     return phone_number
+        return phone_number
 
     def validate(self, validated_data):
         """Validate password"""

@@ -21,6 +21,11 @@
     font-size: 2rem;
 }
 
+.form-subtitle {
+    font-weight: bold;
+    font-size: 1rem;
+}
+
 .form-input {
     display: block;
     font-size: 1rem;
@@ -64,4 +69,8 @@
     text-align: center;
     width: 100%;
     margin: 0.5rem 0;
+}
+a{
+    color: black !important;
+    text-decoration: underline !important;
 }

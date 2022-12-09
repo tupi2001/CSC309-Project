@@ -1,9 +1,59 @@
 import { Link } from "react-router-dom";
 import styles from "./SignupPage.module.css";
+// import { API_URL } from "../constants";
+import axios from 'axios'
+import React, { useState } from 'react';
+
+const URL = 'http://localhost:8000/accounts/register/';
 
 const SignupPage = () => {
+  const [data, setData] = useState({
+    fname: "",
+    lname: "",
+    email: "",
+    username: "",
+    password1: "",
+    password2: "",
+    phone: "",
+    avatar: null, 
+  })
+  const [error, setError] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    axios
+      .post(URL, {
+        first_name: data.fname,
+        last_name : data.lname,
+        username: data.username,
+        email: data.email,
+        password: data.password1,
+        password2: data.password2,
+        phone_number: data.phone,
+        avatar: data.avatar
+      })
+      .then((response) => {
+        if (response.data.success) {
+          //redirect to home page
+          window.location.href = '/';
+        } else {
+          setError(true);
+          setErrorMessage(response.data.message);
+        }
+      })
+      .catch((err) => {
+        setError(true);
+        setErrorMessage(err.message);
+      });
+  };
+
+  const handleFileSelect = (e) => {
+
+  }
+  
   return (
-    <form className={styles.form}>
+    <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
       <div className={styles["form-content"]}>
         <h1 className={styles["form-title"]}>Please sign up</h1>
 
@@ -31,6 +81,11 @@ const SignupPage = () => {
             ></input>
           </div>
         </div>
+
+        <label className={styles["form-label"]} htmlFor="username">
+          Username
+        </label>
+        <input type="text" className={styles["form-input"]} id="username"></input>
 
         <label className={styles["form-label"]} htmlFor="email">
           Email Address
@@ -65,9 +120,14 @@ const SignupPage = () => {
           id="password2"
         ></input>
 
-        <Link to="/login/" className={styles["form-redirect"]}>
-          Already have an account?
-        </Link>
+        <label className={styles["form-label"]} htmlFor="avatar">
+          Upload Avatar
+        </label>
+          <input
+            className={styles["file-input"]}
+            type="file" onChange={handleFileSelect} id ="avatar"
+          ></input>
+
         <button className={styles["form-btn"]}>Sign up</button>
       </div>
     </form>
