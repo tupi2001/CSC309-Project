@@ -5,6 +5,16 @@ import axios from 'axios'
 import React, { useState } from 'react';
 
 const URL = 'http://localhost:8000/accounts/register/';
+const var_maps = {
+  first_name: "First Name",
+  last_name: "Last Name",
+  username: "Username",
+  email: "Email Address",
+  phone_number: "Phone Number",
+  password: "Password",
+  password2: "Confirm Password",
+  avatar: "Avatar",
+};
 
 const SignupPage = () => {
   const [data, setData] = useState({
@@ -18,38 +28,58 @@ const SignupPage = () => {
     avatar: null, 
   })
   const [error, setError] = useState("");
-  const [errorMessage, setErrorMessage] = useState("");
+  const [errorMessage, setErrorMessage] = useState([]);
+
+  // handles changes in form data
+  function change(e){  
+    const new_data = {... data}
+    new_data[e.target.id] = e.target.value
+    setData(new_data)
+  }
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    const form = new FormData();
+    form.append("first_name", data.fname);    
+    form.append("last_name", data.lname);  
+    form.append("username", data.username);  
+    form.append("email", data.email);  
+    form.append("password", data.password1);  
+    form.append("password2", data.password2);  
+    form.append("phone_number", data.phone); 
+    if(data.avatar){
+      form.append("avatar", data.avatar);
+    }
+
     axios
-      .post(URL, {
-        first_name: data.fname,
-        last_name : data.lname,
-        username: data.username,
-        email: data.email,
-        password: data.password1,
-        password2: data.password2,
-        phone_number: data.phone,
-        avatar: data.avatar
+      .post(URL, form, {
+        headers: {
+          'Content-Type': 'multipart/form-data'  
+        }
       })
       .then((response) => {
-        if (response.data.success) {
+        if (response.status == 201) {
           //redirect to home page
-          window.location.href = '/';
-        } else {
-          setError(true);
-          setErrorMessage(response.data.message);
+          alert("You have successfully signed up!");
+          window.location.href = '/login';
         }
       })
       .catch((err) => {
+        console.log(err);
         setError(true);
-        setErrorMessage(err.message);
+        const errors = Object.entries(err.response.data).map(([key, value])=>{
+          return var_maps[key] + ": " + value
+        });
+
+        setErrorMessage(errors);
       });
   };
 
   const handleFileSelect = (e) => {
-
+    const new_data = {... data};
+    new_data.avatar = e.target.files[0];
+    console.log(new_data);
+    setData(new_data);
   }
   
   return (
@@ -67,6 +97,7 @@ const SignupPage = () => {
               autoFocus
               className={styles["form-input"]}
               id="fname"
+              onChange={(e) => change(e)} 
             ></input>
           </div>
 
@@ -77,7 +108,8 @@ const SignupPage = () => {
             <input
               type="text"
               className={styles["form-input"]}
-              id="email"
+              id="lname"
+              onChange={(e) => change(e)} 
             ></input>
           </div>
         </div>
@@ -85,12 +117,12 @@ const SignupPage = () => {
         <label className={styles["form-label"]} htmlFor="username">
           Username
         </label>
-        <input type="text" className={styles["form-input"]} id="username"></input>
+        <input type="text" className={styles["form-input"]} id="username" onChange={(e) => change(e)} ></input>
 
         <label className={styles["form-label"]} htmlFor="email">
           Email Address
         </label>
-        <input type="email" className={styles["form-input"]} id="email"></input>
+        <input type="email" className={styles["form-input"]} id="email" onChange={(e) => change(e)} ></input>
 
         <label className={styles["form-label"]} htmlFor="phone">
           Phone Number
@@ -99,7 +131,8 @@ const SignupPage = () => {
           type="tel"
           className={styles["form-input"]}
           id="phone"
-          pattern="[0-9]{10}"
+          onChange={(e) => change(e)} 
+          pattern='^(\+\d{1,2}\s)?\(?\d{3}\)?[\s.-]\d{3}[\s.-]\d{4}$'
         ></input>
 
         <label className={styles["form-label"]} htmlFor="password1">
@@ -109,6 +142,7 @@ const SignupPage = () => {
           type="password"
           className={styles["form-input"]}
           id="password1"
+          onChange={(e) => change(e)}
         ></input>
 
         <label className={styles["form-label"]} htmlFor="password2">
@@ -118,6 +152,7 @@ const SignupPage = () => {
           type="password"
           className={styles["form-input"]}
           id="password2"
+          onChange={(e) => change(e)}
         ></input>
 
         <label className={styles["form-label"]} htmlFor="avatar">
@@ -127,7 +162,7 @@ const SignupPage = () => {
             className={styles["file-input"]}
             type="file" onChange={handleFileSelect} id ="avatar"
           ></input>
-
+        {error? <ul> {errorMessage.map((value)=>(<li>{value} </li>))} </ul>: null}
         <button className={styles["form-btn"]}>Sign up</button>
       </div>
     </form>

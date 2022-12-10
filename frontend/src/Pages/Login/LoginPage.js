@@ -4,6 +4,7 @@ import NavLink from "react-router-dom"
 // import { API_URL } from "../constants";
 import axios from 'axios'
 import { useState } from "react";
+import React from "react";
 
 // to obtain pair token
 const URL = 'http://localhost:8000/accounts/api/token/'
@@ -48,7 +49,7 @@ function LoginPage() {
           <h4 className={styles["form-subtitle"]}>to continue to Toronto Fitness</h4>
           <input id='email' onChange={(e) => change(e)} placeholder="email" type="Email" className={styles["form-input"]}></input>
           <input id='password' onChange={(e) => change(e)} type="password" placeholder="Password" className={styles["form-input"]}></input>
-          <Link to="/signup/">Don't have an account? Sign up here!</Link>
+          <Link id={styles["signup_btn"]} to="/signup/">Don't have an account? Sign up here!</Link>
           <button className={styles["form-btn"]}>Sign in</button>
         </div>
       </form>

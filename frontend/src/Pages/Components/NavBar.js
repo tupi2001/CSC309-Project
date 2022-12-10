@@ -1,5 +1,6 @@
 import styles from "./NavBar.module.css"
 import {Outlet, Link} from "react-router-dom"
+import React from "react";
 const NavBar = () => (
     <>
     <header className={styles['navbar']}>
