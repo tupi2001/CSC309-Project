@@ -12,7 +12,7 @@ const URL = 'http://localhost:8000/accounts/api/token/'
 function LoginPage() {
   // initializes fields to empty
   const [data, setData] = useState({
-    email: "",
+    username: "",
     password: "",
   })
 
@@ -29,17 +29,17 @@ function LoginPage() {
     e.preventDefault();
     axios
       .post(URL, {
-        email: data.email,
+        username: data.username,
         password: data.password
       }).then((response)=>{
         if(response.status === 200){
-            localStorage.setItem("SessionToken", response.data.access)
+            localStorage.setItem("SessionToken", response.data.token)
             // route to home page
             window.location.href = "/home"
         }else{
-            alert("Email or Password is invalid")
+            alert("Username or Password is invalid")
         }
-      }).catch((e)=>{alert("Email or Password is invalid")})
+      }).catch((e)=>{alert("Username or Password is invalid")})
   }
   return (
     <div>
@@ -47,7 +47,7 @@ function LoginPage() {
         <div className={styles["form-content"]}>
           <h1 className={styles["form-title"]}>Please sign in</h1>
           <h4 className={styles["form-subtitle"]}>to continue to Toronto Fitness</h4>
-          <input id='email' onChange={(e) => change(e)} placeholder="email" type="Email" className={styles["form-input"]}></input>
+          <input id='username' onChange={(e) => change(e)} placeholder="email" type="Email" className={styles["form-input"]}></input>
           <input id='password' onChange={(e) => change(e)} type="password" placeholder="Password" className={styles["form-input"]}></input>
           <Link id={styles["signup_btn"]} to="/signup/">Don't have an account? Sign up here!</Link>
           <button className={styles["form-btn"]}>Sign in</button>

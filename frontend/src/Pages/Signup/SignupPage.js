@@ -65,12 +65,11 @@ const SignupPage = () => {
         }
       })
       .catch((err) => {
-        console.log(err);
+        console.log(err.response);
         setError(true);
         const errors = Object.entries(err.response.data).map(([key, value])=>{
-          return var_maps[key] + ": " + value
+        return var_maps[key] + ": " + value
         });
-
         setErrorMessage(errors);
       });
   };
@@ -78,7 +77,6 @@ const SignupPage = () => {
   const handleFileSelect = (e) => {
     const new_data = {... data};
     new_data.avatar = e.target.files[0];
-    console.log(new_data);
     setData(new_data);
   }
   

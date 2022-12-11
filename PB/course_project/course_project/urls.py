@@ -16,6 +16,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import include, path
 from core.views import front
+from django.conf.urls.static import static
+from django.conf import settings
 
 # user can access classes, accounts, studios and subscriptions using specific urls
 
@@ -27,4 +29,4 @@ urlpatterns = [
     path('subscriptions/', include('subscriptions.urls', namespace='subscriptions')),
     path("api-auth/", include("rest_framework.urls")),
     path("", front, name="front"),
-]
+] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
