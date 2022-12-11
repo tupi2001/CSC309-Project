@@ -113,7 +113,9 @@ class ClassesView(ListAPIView):
             dict = {
                 'name':gym_class.name,
                 'class_id': gym_class.id,
+                'coach': gym_class.coach,
                 'start_time': gym_class.start_time,
+                'end_time': gym_class.end_time,
                 'start_date': gym_class.date
             }
             classes.append(dict)
