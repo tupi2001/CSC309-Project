@@ -13,7 +13,7 @@ const NavBar = () => {
             <Link className={styles['navbar__anchor']} to="/classes"> <div className={styles['navbar__title']}>Classes</div> </Link>
             <Link className={styles['navbar__anchor']} to="/studios"><div className={styles['navbar__title']}>Studios</div></Link>
             <Link className={styles['navbar__anchor']} style={{"marginRight": "auto"}} to="/coaches"><div className={styles['navbar__last']}>Coaches</div></Link>
-            <div className={styles['navbar__item']}>About Us</div>
+            <Link className={styles['navbar__anchor']} to="/home"><div className={styles['navbar__item']}> About Us</div></Link>
             <Link className={styles['navbar__anchor']} to="/profile"><div className={styles['navbar__item']}>Profile</div></Link>
             <div onClick={logout} className={styles['navbar__item']}>Log Out</div>        
         </header>
