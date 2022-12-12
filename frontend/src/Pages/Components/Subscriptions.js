@@ -9,13 +9,13 @@ const Profile = (props) => {
     const [card, setCard] = useState({
         name: "",
         card: "",
-      })
+      });
     const [data, setData] = useState({
         user: "",
         subscription: "",
         card: "",
         renew: false,
-      })
+      });
     const [user, setUser] = useState({});
     const [hasSub, sethasSub] = useState(false);
 

@@ -4,6 +4,7 @@ import styles from "./Profile.module.css";
 import {Link} from "react-router-dom"
 import Card from "./Card"
 import Subscriptions from "./Subscriptions"
+import Payments from "./Payments";
 const URL = 'http://localhost:8000/accounts/me/';
 
 const Profile = (props) => {
@@ -147,6 +148,7 @@ const Profile = (props) => {
         </form>
         <Card></Card>
         <Subscriptions></Subscriptions>
+        <Payments></Payments>
         </div>
       );
 }

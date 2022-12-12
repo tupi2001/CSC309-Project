@@ -8,7 +8,7 @@ const Card = (props) => {
         user: "",
         name: "",
         card: "",
-      })
+      });
     const [hasCard, sethasCard] = useState(false);
 
     function change(e){  
