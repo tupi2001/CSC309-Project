@@ -1,6 +1,7 @@
 import {useContext, useEffect, useState} from "react";
 // import PlayersTable from "./PlayersTable";
 // import APIContext from "../../Contexts/APIContext";
+import styles from "../Studios.module.css";
 import GymClasses from "./GymClasses";
 import React from 'react';
 import APIContext from "../../../Contexts/APIContext";
@@ -30,8 +31,9 @@ const Classes = () => {
 
     return (
         <>
-            <strong style={{color:'#f00'}}>Search</strong>
+            <strong>Search</strong>
             <input
+                className={styles["searchTerm"]} 
                 style={{width: 300, height: 20, fontSize: 18, margin: 4}}
                 value={params.search}
                 onChange={(event) => {
@@ -44,6 +46,7 @@ const Classes = () => {
             <br></br>
             <strong style={{color:'#00f'}}>Studio id</strong>
             <input
+                className={styles["searchTerm"]}
                 style={{width: 280, height: 20, fontSize: 18, margin: 4}}
                 value={params.studio_id}
                 onChange={(event) => {
