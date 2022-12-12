@@ -20,4 +20,5 @@ const Classes = () => {
                 console.log(data);
                 return(json.data);
             })
-    }, )
+    },
+)}

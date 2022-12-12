@@ -80,7 +80,7 @@ const Profile = (props) => {
         <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
           <div className={styles["form-content"]}>
             <h1 className={styles["form-title"]}>Profile</h1>
-            <img src={user["avatar"]}/>
+            <img className={styles["form-img"]} src={user["avatar"]}/>
             <div className={styles["form-input-group"]}>
               <div className={styles["input-group"]}>
                 <label className={styles["form-label"]} htmlFor="fname">

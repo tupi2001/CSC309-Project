@@ -15,7 +15,7 @@ main {
     font-family: Helvetica;
     font-weight: 300;
 }
-a {
+.navbar__anchor {
     text-decoration: none;
     color: white;
 }
