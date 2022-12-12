@@ -37,9 +37,16 @@ const Studios = (props) => {
             setError("No studio was found")
         }
     }
-    
+
     return (<>
-        <input type="text" onChange={filterStuff} />
+        <div className={styles["wrap"]}>
+            <div className={styles["search"]}>
+                <input type="text" className={styles["searchTerm"]} placeholder="What are you looking for?" onChange={filterStuff}/>
+                    <button type="submit" className={styles["searchButton"]}>
+                        <i class="fa fa-search"></i>
+                    </button>
+            </div>
+        </div>
         <ul>
             {studios.map((studio, i) => {
                 return <Link key={i} to={`/studios/${studio.id}`}><li>{studio.name}</li></Link>

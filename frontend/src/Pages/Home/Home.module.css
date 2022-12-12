@@ -10,7 +10,7 @@ main {
     display: flex;
     align-items: center;
     
-    background:  #0d6efd;
+    background:  #005b96;
     color: white;
     font-family: Helvetica;
     font-weight: 300;
@@ -28,4 +28,13 @@ main {
     padding: 16px 16px;
     cursor: pointer;
     vertical-align: middle;
+}
+footer {
+    clear: both;
+    background-color: #005b96;
+    padding: .5em;
+    font-size: 0.8em;
+    color: #fff;
+    display: flex;
+    justify-content: space-between;
 }
