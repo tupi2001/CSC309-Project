@@ -1,11 +1,13 @@
 from django.shortcuts import render
 import json
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from dateutil.relativedelta import relativedelta
+from rest_framework.views import APIView
 
 from .models import Subscriptions, Card, Payment, UserSub
 from .serializers import SubscriptionSerializer, CardSerializer, UserSubSerializer, PaymentSerializer
@@ -57,6 +59,17 @@ class UpdateCard(generics.UpdateAPIView):
                 return Response(serializer.data, status= status.HTTP_200_OK)
         
         return Response({'error': "Card does not exist."}, status= status.HTTP_400_BAD_REQUEST)
+
+class CardViewSet(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CardSerializer
+
+    def get_object(self):
+        return Card.objects.get(user_id = self.request.user)
+
+    def get(self, arg):
+        serializer = CardSerializer(self.get_object())
+        return Response(serializer.data)
 
 class AddSubscription(generics.CreateAPIView):
     """Create a User-Subscription pairing"""
@@ -134,6 +147,25 @@ class UpdateSubscription(generics.UpdateAPIView):
         
         return Response({'error': "UserSub does not exist."}, status= status.HTTP_400_BAD_REQUEST)
 
+class SubscriptionsViewSet(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = Subscriptions
+
+    def get(self, arg):
+        subs = Subscriptions.objects.all()
+        serilizer = SubscriptionSerializer(subs, many=True)
+        return Response(serilizer.data)
+
+class UserSubViewSet(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSub
+
+    def get_object(self):
+        return UserSub.objects.get(user_id = self.request.user.id)
+
+    def get(self, arg):
+        serializer = UserSubSerializer(self.get_object())
+        return Response(serializer.data)
 
 class PaymentHistory(generics.GenericAPIView):
     """View for payment history of logged in user"""
