@@ -101,24 +101,48 @@ class ClassesView(ListAPIView):
         #     gym_class.date = datetime.strptime(gym_class.date, '%Y-%m-%d')
             # except:
             #     gym_class.date = datetime.strptime(gym_class.date, '%m/%d/%Y')
-        print(set)
+        # print(set)
         # str_date = gym_class.date.now.strftime("%m/%d/%Y
         # set2 = set.filter(date__gte = datetime.now()).order_by('start_time')
         # start_date = datetime.datetime.strptime(date, '%m/%d/%Y')
         set2 = set.filter(date__gte = datetime.now()-timedelta(days=1)).order_by('date')
+        combo = {}
 
+        search = self.request.GET.get('search', '')
+        # search = 'ayanaa'
         classes = []
 
-        for gym_class in set2:
-            dict = {
-                'name':gym_class.name,
-                'class_id': gym_class.id,
-                'coach': gym_class.coach,
-                'start_time': gym_class.start_time,
-                'end_time': gym_class.end_time,
-                'start_date': gym_class.date
-            }
-            classes.append(dict)
+        if search == '':
+            # set3 = set2
+            for gym_class in set2:
+                dict = {
+                    'name':gym_class.name,
+                    'class_id': gym_class.id,
+                    'coach': gym_class.coach,
+                    'start_time': gym_class.start_time,
+                    'end_time': gym_class.end_time,
+                    'start_date': gym_class.date
+                }
+                classes.append(dict)
+        else:
+            set3 = set2.filter(name__icontains=search)
+            set4 = set2.filter(coach__icontains=search)
+            set5 = set2.filter(start_time__icontains=search)
+            set6 = set2.filter(end_time__icontains=search)
+            set7 = set2.filter(date__icontains=search)
+            combo = set3 | set4 | set5 | set6 | set7
+            print(f'Union: {combo}')
+            # print(set4)
+            for gym_class in combo:
+                dict = {
+                    'name':gym_class.name,
+                    'class_id': gym_class.id,
+                    'coach': gym_class.coach,
+                    'start_time': gym_class.start_time,
+                    'end_time': gym_class.end_time,
+                    'start_date': gym_class.date
+                }
+                classes.append(dict)
 
         data = {'gym_classes': classes}
 
