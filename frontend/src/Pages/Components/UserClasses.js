@@ -30,7 +30,7 @@ const UserClasses = (props) => {
 
             <ul>
                 {classes.map((inst) => (
-                    <li>{inst.user}</li>
+                    <li>id{inst.id} {inst.class_name}: {inst.name} at {inst.start_date} from {inst.start_time}-{inst.end_time}</li>
                 ))}
             </ul>
 
