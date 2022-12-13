@@ -92,7 +92,8 @@ class ClassesView(ListAPIView):
     def get(self, request, *args, **kwargs):
         """Gets studio id to list all classes that belong to that studio"""
         today = now().time()
-        studio = get_object_or_404(Studio, pk=self.kwargs['studio_id'])
+        studio = Studio.objects.get(id=self.kwargs['studio_id'])
+        # studio = get_object_or_404(Studio, id=self.kwargs['studio_id'])
         print(studio.name)
         set = GymClass.objects.filter(studio=self.kwargs['studio_id'])
         # print(set)

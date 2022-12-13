@@ -33,6 +33,12 @@ const Studio = (props) => {
                         <li className={styles['amenities-list']}>{studio.phone_number}</li>
                     </>
             </ul>
+            <h3>Address</h3>
+            <ul style={{listStyleType: 'none'}}>
+                     <>
+                        <li className={styles['amenities-list']}>{studio.address}</li>
+                    </>
+            </ul>
             <h3>Amenities</h3>
             <ul>
                 {studio.amenities ? studio.amenities.map((single, i) => {

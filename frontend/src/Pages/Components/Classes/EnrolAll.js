@@ -8,13 +8,15 @@ const EnrolClassAll = (props) => {
     const [studio_id, setStudio_id] = useState([]);
     const [class_id, setClass_id] = useState([]);
     function enrol(){
-        axios.get(`http://localhost:8000/classes/user/${studio_id}/enrol/${class_id}/`, {
+        axios.get(`http://localhost:8000/classes/user/${studio_id}/enrol/${class_id}/all/`, {
             headers: {
                 Authorization: "Token " + localStorage.getItem("SessionToken")
             }
         }).then((response) => {
             if(response.status === 200){
                 window.location.reload();
+            } else if (response.status === 201) {
+                alert("class full, cannot enrol");
             }
         })
     }

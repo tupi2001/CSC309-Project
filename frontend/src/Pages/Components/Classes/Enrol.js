@@ -15,6 +15,8 @@ const EnrolClass = (props) => {
         }).then((response) => {
             if(response.status === 200){
                 window.location.reload();
+            } else if (response.status === 201) {
+                alert("class full, cannot enrol");
             }
         })
     }

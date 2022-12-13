@@ -110,6 +110,7 @@ class ListDistanceView(generics.GenericAPIView):
                 'longitude': sorted_studios[i].longitude,
                 'amenities': amenities_list,
                 'phone_number': sorted_studios[i].phone_number,
+                'address': sorted_studios[i].address,
                 'distance': distance[i],
             }
             studio_ordered.append(dict)

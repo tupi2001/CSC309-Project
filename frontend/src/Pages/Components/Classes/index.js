@@ -74,9 +74,7 @@ const Classes = () => {
             <input
                 className={styles["searchTerm"]}
                 style={{width: 280, height: 20, fontSize: 18, margin: 4}}
-                value={params.studio_id}
                 onChange={(event) => {
-                    console.log("changed");
                     setParams({
                         search:params.search,
                         studio_id: event.target.value,
