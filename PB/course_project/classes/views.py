@@ -280,7 +280,8 @@ class UserClassesView(ListAPIView):
                 'id': gym_class.gym_class.id,
                 'start_date': gym_class.gym_class.date,
                 'start_time': gym_class.gym_class.start_time, 
-                'end_time': gym_class.gym_class.end_time
+                'end_time': gym_class.gym_class.end_time,
+                'studio': gym_class.gym_class.studio.id
             }
             classes.append(dict)
 
