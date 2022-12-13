@@ -284,6 +284,4 @@ class UserClassesView(ListAPIView):
             }
             classes.append(dict)
 
-        data = {'gym_class': classes}
-        print(data)
-        return Response(data)
+        return JsonResponse(classes, safe=False)

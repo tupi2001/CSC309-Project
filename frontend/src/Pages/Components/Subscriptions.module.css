@@ -89,7 +89,7 @@ ul{
     color: #ff5050;
 }
 
-.form-img{
+img{
     border-radius: 50%;
     width: 120px;
     height: auto;
@@ -97,4 +97,12 @@ ul{
 
 link{
     color: #61dafb;
+}
+
+.text{
+    display: block;
+    font-weight: bolder;
+    font-size: 1.2rem;
+    width: 100%;
+    margin: 0.1rem 0 0.5rem;   
 }

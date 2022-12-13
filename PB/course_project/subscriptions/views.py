@@ -1,11 +1,13 @@
 from django.shortcuts import render
 import json
 from django.shortcuts import get_object_or_404
+from rest_framework.decorators import api_view
 from django.http import JsonResponse
 from rest_framework import generics, permissions, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from dateutil.relativedelta import relativedelta
+from rest_framework.views import APIView
 
 from .models import Subscriptions, Card, Payment, UserSub
 from .serializers import SubscriptionSerializer, CardSerializer, UserSubSerializer, PaymentSerializer
@@ -33,17 +35,16 @@ class UpdateCard(generics.UpdateAPIView):
     queryset = Card.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = CardSerializer
-
-    def get_queryset(self, pk):
-        """Override to seek users by user_id"""
-        return self.get_serializer().Meta.model.objects.filter(user_id = pk).first()
+    lookup_field = 'user_id'
     
     def put(self, request, pk = None, *args, **kwargs):
         """Put method to allow users to update their card information"""
 
         # check and see if card exists
-        if self.get_queryset(pk):
-            serializer = CardSerializer(self.get_queryset(pk), data=request.data)
+        if self.get_object():
+            card = self.get_object()
+            
+            serializer = CardSerializer(card, data=request.data)
             
             if serializer.is_valid():
                 serializer.save()
@@ -55,8 +56,21 @@ class UpdateCard(generics.UpdateAPIView):
                     user_sub.save()
                         
                 return Response(serializer.data, status= status.HTTP_200_OK)
+            else:
+                return Response({"message": "failed", "details": serializer.errors})
         
         return Response({'error': "Card does not exist."}, status= status.HTTP_400_BAD_REQUEST)
+
+class CardViewSet(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CardSerializer
+
+    def get_object(self):
+        return Card.objects.get(user_id = self.request.user)
+
+    def get(self, arg):
+        serializer = CardSerializer(self.get_object())
+        return Response(serializer.data)
 
 class AddSubscription(generics.CreateAPIView):
     """Create a User-Subscription pairing"""
@@ -96,19 +110,16 @@ class UpdateSubscription(generics.UpdateAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = UserSubSerializer
     queryset = UserSub.objects.all()
-
-    def get_queryset(self, pk):
-        """Override to seek users by user_id"""
-        return self.get_serializer().Meta.model.objects.filter(user_id = pk).first()
+    lookup_field = 'user_id'
     
-    def put(self, request, pk = None, *args, **kwargs):
+    def put(self, request, *args, **kwargs):
         """Put method to allow users to update their subscription"""
 
         # check and see if usersub exists
-        if self.get_queryset(pk):
-            usersub_object = self.get_queryset(pk)
+        if self.get_object():
+            usersub_object = self.get_object()
             
-            serializer = UserSubSerializer(self.get_queryset(pk), data=request.data)
+            serializer = UserSubSerializer(usersub_object, data=request.data)
 
              # check if user is authenticated
             if self.request.user.id == usersub_object.user_id:
@@ -129,25 +140,53 @@ class UpdateSubscription(generics.UpdateAPIView):
                 if serializer.is_valid():
                     serializer.save()
                     return Response(serializer.data, status= status.HTTP_200_OK)
+                else:
+                    return Response({"message": "failed", "details": serializer.errors})
             else:
                 return Response({'error': 'Unauthenticated'})
         
         return Response({'error': "UserSub does not exist."}, status= status.HTTP_400_BAD_REQUEST)
 
+class SubscriptionsViewSet(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = Subscriptions
 
-class PaymentHistory(generics.GenericAPIView):
+    def get(self, arg):
+        subs = Subscriptions.objects.all()
+        serilizer = SubscriptionSerializer(subs, many=True)
+        return Response(serilizer.data)
+
+class UserSubViewSet(APIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = UserSub
+
+
+    def get_object(self):
+        return UserSub.objects.get(user_id = self.request.user.id)
+
+    def get(self, arg):
+        serializer = UserSubSerializer(self.get_object())
+        return Response(serializer.data)
+
+class PaymentHistory(APIView):
     """View for payment history of logged in user"""
     serializer_class = PaymentSerializer
     permission_classes =  [IsAuthenticated]
 
-    def get(self, *args, **kwargs):
+    def get(self, arg):
         """Get method for payment history for logged in user"""
 
         # checks to see if user has payments made
-        if not Payment.objects.filter(user=self.request.user).exists():
+        if not Payment.objects.filter(user =self.request.user).exists():
             return Response('NOT FOUND', status=404)
 
         payments = Payment.objects.filter(user = self.request.user)
+
+        # serializer = PaymentSerializer(payments, many=True)
+
+        # return Response(serializer.data)
+
+        # paymentnumber = 1
 
         payments_json = []
 
@@ -165,9 +204,7 @@ class PaymentHistory(generics.GenericAPIView):
                 if user.subscription.charge_every == 'Month':
                     next_payment = {'user': user.user.__str__(), 'date': user.renew_date + relativedelta(months=+1), 'card': user.card.__str__(), 'sub': user.subscription.__str__()}
                 else:
-                    next_payment = {'user': user.user.__str__(), 'date': user.renew_date + relativedelta(years=+1), 'card': user.card.__str__(), 'sub': user.subscription.__str__()}
-                payments_json.append(next_payment)
+                    next_payment = {'user': user.user.__str__(), 'date': user.renew_date + relativedelta(months=+12), 'card': user.card.__str__(), 'sub': user.subscription.__str__()}
+                payments_json.append(dict)
 
-        data = {'payments': payments_json}
-
-        return JsonResponse(data)
+        return JsonResponse(payments_json, safe=False)

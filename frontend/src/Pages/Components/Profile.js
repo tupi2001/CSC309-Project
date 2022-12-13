@@ -1,6 +1,11 @@
 import axios from "axios";
 import React, { useState, useEffect } from "react";
 import styles from "./Profile.module.css";
+import {Link} from "react-router-dom"
+import Card from "./Card"
+import Subscriptions from "./Subscriptions"
+import Payments from "./Payments";
+import UserClasses from "./UserClasses";
 const URL = 'http://localhost:8000/accounts/me/';
 
 const Profile = (props) => {
@@ -77,6 +82,7 @@ const Profile = (props) => {
         })
     }, []);
     return (
+        <div>
         <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
           <div className={styles["form-content"]}>
             <h1 className={styles["form-title"]}>Profile</h1>
@@ -141,6 +147,11 @@ const Profile = (props) => {
             <button className={styles["form-btn"]}>Save</button>
           </div>
         </form>
+        <Card></Card>
+        <Subscriptions></Subscriptions>
+        <Payments></Payments>
+        <UserClasses></UserClasses>
+        </div>
       );
 }
 export default Profile;
