@@ -1,0 +1,24 @@
+.container {
+    display: grid;
+    grid-template-rows: 100px auto auto auto;
+    grid-template-columns: auto auto auto auto;
+    grid-gap: 2px;
+    background-color: #282c34;
+    width: 40%;
+    padding: 2px;
+}
+
+.container button {
+    height: 100px;
+    padding: 0;
+    margin: 0;
+    font-size: 40px;
+    color: white;
+}
+
+.container input {
+    font-size: 40px;
+    grid-column: 1 / 5;
+    margin: 0;
+    padding: 0;
+}

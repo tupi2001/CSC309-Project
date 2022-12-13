@@ -15,7 +15,7 @@ urlpatterns = [
     path('<int:studio_id>/view/', ClassesView.as_view(), name='view'),
     path('user/<int:studio_id>/enrol/<int:class_id>/', EnrolUserInClassView.as_view(), name='enrol'),
     path('user/<int:studio_id>/enrol/<int:class_id>/all/', EnrolUserInClassesView.as_view(), name='enrol-all'),
-    path('user/<int:studio_id>/unenrol/<int:class_id>/all/', RemoveUserFromClassView.as_view(), name='unenrol'),
+    path('user/<int:studio_id>/unenrol/<int:class_id>/', RemoveUserFromClassView.as_view(), name='unenrol'),
     path('user/<int:studio_id>/unenrol/<int:class_id>/all/', RemoveUserFromClassesView.as_view(), name='unenrol-all'),
     path('user/view/', UserClassesView.as_view(), name='view'),
 ]

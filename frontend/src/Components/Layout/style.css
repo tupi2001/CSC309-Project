@@ -1,0 +1,8 @@
+nav {
+    background: lightblue;
+    font-size: 2rem;
+}
+
+nav a {
+    margin: 12px;
+}

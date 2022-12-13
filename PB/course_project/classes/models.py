@@ -4,7 +4,6 @@ from django.forms import ValidationError
 from django.shortcuts import get_object_or_404
 from studios.models import Studio
 from accounts.models import CustomUser
-from recurrence.fields import RecurrenceField
 
 from dateutil.relativedelta import *
 from dateutil.easter import *
