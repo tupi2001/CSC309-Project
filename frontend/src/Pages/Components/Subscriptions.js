@@ -64,9 +64,9 @@ const Profile = (props) => {
     }, []);
 
     function change(e){  
-        const new_data = {... data}
-        new_data[e.target.id] = e.target.value
-        setData(new_data)
+        const new_data = {... data};
+        new_data[e.target.id] = e.target.value;
+        setData(new_data);
     }
 
     function handleSubmit (e) {
