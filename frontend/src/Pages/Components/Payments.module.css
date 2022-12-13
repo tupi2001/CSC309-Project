@@ -1,4 +1,4 @@
-.form {
+.phistory {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -27,7 +27,7 @@
     max-width: 100%;
 }
 
-.form-title {
+.title {
     font-weight: bold;
     font-size: 2rem;
     margin-bottom: 1rem;
@@ -97,12 +97,4 @@ img{
 
 link{
     color: #61dafb;
-}
-
-.text{
-    display: block;
-    font-weight: bolder;
-    font-size: 1.2rem;
-    width: 100%;
-    margin: 0.1rem 0 0.5rem;   
 }

@@ -18,6 +18,7 @@ const Profile = (props) => {
       });
     const [user, setUser] = useState({});
     const [hasSub, sethasSub] = useState(false);
+    const [renew, setRenew] = useState(false);
 
     useEffect(() => {
         // gets all current subscription plans  
@@ -57,6 +58,7 @@ const Profile = (props) => {
             }
         }).then((response) => {
             setData(response.data);
+            setRenew(response.data.renew);
             sethasSub(true);
         })
     }, []);
@@ -114,8 +116,6 @@ const Profile = (props) => {
         <form className={styles.form} onSubmit={(e) => handleSubmit(e)}>
             <div className={styles["form-content"]}>
             <h1 className={styles["form-title"]}>Subscriptions</h1>
-
-            <h3>Current Subscription: ${data.subscription}</h3>
             
             <label className={styles["form-label"]} htmlFor="subscription">
                 Subscription Plans
@@ -125,13 +125,13 @@ const Profile = (props) => {
               <option value={sub.id}>{sub.value}, {sub.charge_every}</option>
             ))}
           </select>
-    
-            <h3>Current card: {card.name} {card.card}</h3>
+
+            <p className={styles["text"]}>Current card: {card.name} {card.card}</p>
 
             <label className={styles["form-label"]} htmlFor="renew">
                 Renew?
             </label>
-            <input type="checkbox" className={styles["form-input"]} id="renew" onChange={(e) => change(e)} value={data.renew} ></input>
+            <input type="checkbox" className={styles["form-input"]} id="renew" onChange={e => {setRenew(!renew); change(e)}} checked={renew} ></input>
             <button className={styles["form-btn"]}>Update Subscription</button>
             </div>
         </form>

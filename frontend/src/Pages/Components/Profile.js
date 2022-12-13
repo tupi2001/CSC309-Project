@@ -5,6 +5,7 @@ import {Link} from "react-router-dom"
 import Card from "./Card"
 import Subscriptions from "./Subscriptions"
 import Payments from "./Payments";
+import UserClasses from "./UserClasses";
 const URL = 'http://localhost:8000/accounts/me/';
 
 const Profile = (props) => {
@@ -149,6 +150,7 @@ const Profile = (props) => {
         <Card></Card>
         <Subscriptions></Subscriptions>
         <Payments></Payments>
+        <UserClasses></UserClasses>
         </div>
       );
 }

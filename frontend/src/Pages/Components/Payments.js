@@ -1,49 +1,50 @@
-import styles from "./Card.module.css";
+import styles from "./Payments.module.css";
 import axios from "axios";
 import React, { useState, useEffect } from "react";
-const URL = 'http://localhost:8000/subscriptions/showcard/';
+const URL = 'http://localhost:8000/subscriptions/paymenthistory/';
 
 const Payments = (props) => {
-    const [payments, setPayments] = useState({});
+    const [classes, setClasses] = useState([]);
+    const [subs, setSubs] = useState({});
 
     useEffect(() => {
-        // gets payment history for currently logged in user
+        // gets all payments done by user
         axios.get('http://localhost:8000/subscriptions/paymenthistory/', {
             headers: {
-                Authorization: "Token " + localStorage.getItem("SessionToken"),
-                'Content-Type': 'application/json',
-                'Accept': 'application/json'
+                Authorization: "Token " + localStorage.getItem("SessionToken")
             }
         }).then((response) => {
-            setPayments(response.data);
+            setClasses(response.data)
+        })
+
+        // gets all current subscription plans  
+        axios.get(URL, {
+            headers: {
+                Authorization: "Token " + localStorage.getItem("SessionToken")
+            }
+        }).then((response) => {
+            setSubs(response.data)
         })
 
     }, []);
 
-    return (
-        <div>
-            <tbody>
-        <tr>
-          <th>User</th>
-          <th>Date</th>
-          <th>Card used</th>
-          <th>Subscription</th>
-        </tr>
-
-        <div>
-            {Object.keys(payments).map((item) => (
-            <tr>
-                <td>{payments[item].user}</td>
-                <td>{payments[item].date}</td>
-                <td>{payments[item].card}</td>
-                <td>{payments[item].sub}</td>
-            </tr>
-            ))}
-        </div>
+    function removeclass(e){
         
-      </tbody>
+    }
+
+    return (
+        <div className={styles["phistory"]}>
+            <h1 className={styles["title"]}>Payments</h1>
+
+            <ul>
+                {classes.map((inst) => (
+                    <><li>{inst.date}, using card {inst.card}, for subscription ${inst.sub}</li></>
+                ))}
+            </ul>
+
         </div>
-      );
-};
+        );
+        
+    }
 
 export default Payments;
