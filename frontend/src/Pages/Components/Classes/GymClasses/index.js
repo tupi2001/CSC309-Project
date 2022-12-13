@@ -12,6 +12,8 @@ const GymClasses = ({ perPage, params }) => {
             <tr>
                 {/* <th> # </th> */}
                 {/* <th> Studio id </th> */}
+                <th> Class-id </th>
+                <th> Studio-id </th>
                 <th> Name </th>
                 <th> Coach </th>
                 <th> Start-time </th>
@@ -23,6 +25,8 @@ const GymClasses = ({ perPage, params }) => {
             {gymclasses.map((gymclass, index) => (
                 <tr key={gymclass.id}>
                     {/* <td>{ gymclass.studio }</td> */}
+                    <td>{ gymclass.class_id}</td>
+                    <td>{ gymclass.studio_id}</td>
                     <td>{ gymclass.name }</td>
                     <td>{ gymclass.coach }</td>
                     <td>{ gymclass.start_time }</td>

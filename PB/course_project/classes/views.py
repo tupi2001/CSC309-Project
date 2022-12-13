@@ -118,6 +118,7 @@ class ClassesView(ListAPIView):
                 dict = {
                     'name':gym_class.name,
                     'class_id': gym_class.id,
+                    'studio_id': gym_class.studio.id,
                     'coach': gym_class.coach,
                     'start_time': gym_class.start_time,
                     'end_time': gym_class.end_time,
@@ -137,6 +138,7 @@ class ClassesView(ListAPIView):
                 dict = {
                     'name':gym_class.name,
                     'class_id': gym_class.id,
+                    'studio_id': gym_class.studio.id,
                     'coach': gym_class.coach,
                     'start_time': gym_class.start_time,
                     'end_time': gym_class.end_time,
@@ -284,5 +286,5 @@ class UserClassesView(ListAPIView):
                 'studio': gym_class.gym_class.studio.id
             }
             classes.append(dict)
-
+        print(classes)
         return JsonResponse(classes, safe=False)
