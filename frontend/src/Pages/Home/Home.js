@@ -58,25 +58,27 @@ const Home = (props) => {
         })}
 
     </MapContainer>
+    <div className={styles['about-container']}>
         <h1> About Us!</h1>
         <p> We are the Toronto Fitness Club and our mission is to help you obtain a healthy lifstyle.
             With over 200 studios all over the world, each equipped with state-of-the-art equipment and highly
             trained professionals that are available to your every need. At the Toronto Fitness Club, we value
             our customers above all else and we strive to hear your feedback.
         </p>
-        <footer>
-            <div class="footer-column">
-                <h2> Contact Us: </h2>
-                <p><a href="mailto:tfc@gmail.com" class="link">tfc@gmail.com</a>
-                    <br /> <a href="tel:(416)-397-6217" class="link">(416)-397-6217</a></p>
-            </div>
-            <div class="footer-column">
-                <h2> Opening Hours: </h2>
-                <p>Weekdays: <time> 10:00 am </time>to <time>4:00 pm</time> <br></br>
-                    Weekends: <time>12:00 pm</time> to <time>2:00 pm</time>
-                </p>
-            </div>
-        </footer>
+    </div>
+    <footer>
+        <div class="footer-column">
+            <h2> Contact Us: </h2>
+            <p><a href="mailto:tfc@gmail.com" className={styles['footer-link']}>tfc@gmail.com</a>
+                <br /> <a href="tel:(416)-397-6217" className={styles['footer-link']}>(416)-397-6217</a></p>
+        </div>
+        <div class="footer-column">
+            <h2> Opening Hours: </h2>
+            <p>Weekdays: <time> 10:00 am </time>to <time>4:00 pm</time> <br></br>
+                Weekends: <time>12:00 pm</time> to <time>2:00 pm</time>
+            </p>
+        </div>
+    </footer>
     </>;
 };
 

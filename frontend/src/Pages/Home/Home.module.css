@@ -36,5 +36,15 @@ footer {
     font-size: 0.8em;
     color: #fff;
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
+}
+
+.footer-link {
+    color: rgb(196, 195, 195);
+}
+
+.about-container {
+    margin: 0 auto;
+    max-width: 70%;
+    padding-bottom: 200px;
 }
