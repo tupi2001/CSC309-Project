@@ -1,0 +1,50 @@
+body {
+    margin: 0;
+}
+
+main {
+    margin: 16px;
+}
+
+.navbar {
+    display: flex;
+    align-items: center;
+    
+    background:  #005b96;
+    color: white;
+    font-family: Helvetica;
+    font-weight: 300;
+}
+
+.navbar__title {
+    font-size: 150%;
+    padding: 12px 16px;
+}
+.navbar__last{
+    margin-right: auto;
+}
+
+.navbar__item {
+    padding: 16px 16px;
+    cursor: pointer;
+    vertical-align: middle;
+}
+footer {
+    clear: both;
+    background-color: #005b96;
+    padding: .5em;
+    font-size: 0.8em;
+    color: #fff;
+    display: flex;
+    justify-content: space-around;
+}
+
+.footer-link {
+    color: rgb(196, 195, 195);
+}
+
+.about-container {
+    margin: 0 auto;
+    max-width: 70%;
+    padding-bottom: 200px;
+}

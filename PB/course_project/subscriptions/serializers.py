@@ -8,7 +8,7 @@ class SubscriptionSerializer(serializers.ModelSerializer):
     class Meta:
         """Holds the model and its specific fields that will be displayed on the UI"""
         model = Subscriptions
-        fields = ('value', 'charge_every')
+        fields = ('id', 'value', 'charge_every')
 
 
 class CardSerializer(serializers.ModelSerializer):
@@ -16,7 +16,7 @@ class CardSerializer(serializers.ModelSerializer):
     class Meta:
         """Holds the model and its specific fields that will be displayed on the UI"""
         model = Card
-        fields = ('user', 'name', 'card')
+        fields = ('id', 'user', 'name', 'card')
 
     def validate_card(self, data):
         """Method for validating if card is inputted correctly"""

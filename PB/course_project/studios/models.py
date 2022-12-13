@@ -24,8 +24,8 @@ class Studio(models.Model):
         validators=[MinValueValidator(-180), MaxValueValidator(180)], null=False
     )
     postal_code = models.CharField(max_length=7, null=False)
-    phone_number = models.PositiveIntegerField(
-        validators=[MaxValueValidator(9999999999)], null=False
+    phone_number = models.CharField(
+        max_length=15, null=False
     )
 
     def __str__(self):
@@ -41,7 +41,7 @@ class Studio(models.Model):
         if not phone_regex.match(self.phone_number):
             raise forms.ValidationError('Phone number invalid')
 
-        if not postal_regex.match(self.postal):
+        if not postal_regex.match(self.postal_code):
             raise forms.ValidationError('Postal code invalid')
 
 

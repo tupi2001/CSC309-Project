@@ -82,7 +82,7 @@ class CreateUserSerializer(serializers.ModelSerializer):
         if not phone_regex.match(phone_number):
             raise serializers.ValidationError('Phone number invalid')
 
-    #     return phone_number
+        return phone_number
 
     def validate(self, validated_data):
         """Validate password"""
@@ -103,6 +103,8 @@ class CreateUserSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         """Create the new user using the data validated"""
+        if "avatar" not in validated_data:
+            validated_data["avatar"] = None
         user = CustomUser.objects.create(
             first_name=validated_data['first_name'],
             last_name=validated_data['last_name'],

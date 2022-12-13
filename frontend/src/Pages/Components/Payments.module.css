@@ -1,0 +1,48 @@
+.phistory {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background-color: #f5f5f5;
+}
+
+.form-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    width: 350px;
+}
+
+.form-input-group {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    position: relative;
+    left: -7px;
+}
+
+.input-group {
+    max-width: 100%;
+}
+
+.title {
+    font-weight: bold;
+    font-size: 2rem;
+    margin-bottom: 1rem;
+}
+
+ul{
+    color: #ff5050;
+}
+
+img{
+    border-radius: 50%;
+    width: 120px;
+    height: auto;
+}
+
+link{
+    color: #61dafb;
+}
