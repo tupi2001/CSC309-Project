@@ -1,16 +1,17 @@
+
 import {createContext, useState} from "react";
 
 export const useAPIContext = () => {
-    const [classes, setClasses] = useState([]);
+    const [gymclasses, setClasses] = useState([]);
 
     return {
-        classes,
+        gymclasses,
         setClasses,
     }
 }
 
 const APIContext = createContext({
-    classes: null, setClasses: () => {},
+    gymclasses: null, setClasses: () => {},
 })
 
 export default APIContext;
